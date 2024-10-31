@@ -1,0 +1,20 @@
+<Project>
+
+    <PropertyGroup>
+        <Authors>Loic Sharma</Authors>
+        <Copyright>Copyright (c) Loic Sharma 2024</Copyright>
+        <Product>NuGet.Next</Product>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/AIDotNet/</PackageProjectUrl>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' == ''">
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
+        <NuGetPackageVersion>5.10.0</NuGetPackageVersion>
+        <MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
+    </PropertyGroup>
+</Project>

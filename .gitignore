@@ -1,0 +1,9 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+/src/NuGet.Next/data
+/src/NuGet.Next/*.db
+/.vs
+/.idea
