@@ -29,7 +29,10 @@ public class DatabaseSearchService : ISearchService
             request.PackageType,
             frameworks);
 
-        var totalHits = await search.CountAsync(cancellationToken);
+        var totalHits = await search
+            .Select(x=>x.Id)
+            .Distinct()
+            .CountAsync(cancellationToken);
         
         var packageIds = search
             .Select(p => p.Id)
