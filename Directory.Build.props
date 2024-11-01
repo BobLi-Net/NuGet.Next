@@ -5,11 +5,11 @@
         <Copyright>Copyright (c) Loic Sharma 2024</Copyright>
         <Product>NuGet.Next</Product>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/AIDotNet/</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/AIDotNet/NuGet.Next</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' == ''">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     </ItemGroup>
 
     <PropertyGroup>

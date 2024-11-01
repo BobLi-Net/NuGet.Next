@@ -198,15 +198,15 @@ namespace NuGet.Next.Core
 
         private static IUpstreamClient UpstreamClientFactory(IServiceProvider provider)
         {
-            var options = provider.GetRequiredService<IOptionsSnapshot<MirrorOptions>>();
+            var options = provider.GetRequiredService<NuGetNextOptions>();
 
             // TODO: Convert to switch expression.
-            if (!options.Value.Enabled)
+            if (!options.Mirror.Enabled)
             {
                 return provider.GetRequiredService<DisabledUpstreamClient>();
             }
 
-            else if (options.Value.Legacy)
+            else if (options.Mirror.Legacy)
             {
                 return provider.GetRequiredService<V2UpstreamClient>();
             }
