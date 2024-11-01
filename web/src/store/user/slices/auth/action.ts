@@ -19,7 +19,7 @@ export const createAuthSlice: StateCreator<
   [["zustand/devtools", never]],
   [],
   UserAuthAction
-> = (set, get) => ({
+> = (set) => ({
   logout: async () => {
     localStorage.removeItem('token');
     set({ isSignedIn: false });

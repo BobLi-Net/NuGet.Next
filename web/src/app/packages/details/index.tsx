@@ -1,8 +1,8 @@
 import { PackageInfo } from "@/services/PackageService";
 import { PackageDetailsState } from "@/types/package";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Spin, Result, Row, Col, Card, Tabs, Collapse, Button } from "antd";
+import { useParams } from "react-router-dom";
+import { Spin, Result, Row, Col, Card, Tabs } from "antd";
 import { DownloadOutlined, HistoryOutlined, GlobalOutlined, GithubOutlined, FileTextOutlined, CloudDownloadOutlined, GiftOutlined } from '@ant-design/icons';
 import { Image, Markdown, Snippet, Tag } from "@lobehub/ui";
 import { Flexbox } from 'react-layout-kit';
@@ -10,7 +10,6 @@ import './index.css'
 
 
 const { TabPane } = Tabs;
-const { Panel } = Collapse;
 
 const PackageDetails = () => {
     const { id, version } = useParams();
@@ -332,17 +331,5 @@ const PackageDetails = () => {
         </Row >
     );
 }
-
-const ExpandableSection = ({ title, expanded, children }: any) => {
-    const [isExpanded, setIsExpanded] = useState(expanded);
-
-    return (
-        <Collapse defaultActiveKey={expanded ? ['1'] : []}>
-            <Panel header={title} key="1">
-                {children}
-            </Panel>
-        </Collapse>
-    );
-};
 
 export default PackageDetails;

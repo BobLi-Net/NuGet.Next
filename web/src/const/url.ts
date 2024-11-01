@@ -1,4 +1,3 @@
-import qs from 'query-string';
 import urlJoin from 'url-join';
 
 import pkg from '../../package.json';

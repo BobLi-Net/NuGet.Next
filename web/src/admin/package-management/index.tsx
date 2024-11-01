@@ -5,12 +5,10 @@ import Divider from '@lobehub/ui/es/Form/components/FormDivider';
 import { useEffect, useState } from 'react';
 import { Tag, Tooltip } from '@lobehub/ui';
 import { DeletePackage, PackageList } from '@/services/PackageService';
-import { useNavigate } from 'react-router-dom';
 import UserSelect from '@/features/User/UserSelect';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const PackageManagementPage = () => {
-    const navigate = useNavigate();
 
     const columns = [
         {
@@ -134,7 +132,7 @@ const PackageManagementPage = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [userIds, setUserIds] = useState<string[]>([]);
-    const [keyword, setKeyword] = useState('');
+    const [keyword,] = useState('');
 
     async function removeUser(id: string, version: string) {
         DeletePackage(id, version)

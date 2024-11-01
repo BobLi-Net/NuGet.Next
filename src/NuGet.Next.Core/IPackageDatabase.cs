@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using NuGet.Versioning;
 
 namespace NuGet.Next.Core
@@ -95,6 +92,15 @@ namespace NuGet.Next.Core
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>False if the package doesn't exist.</returns>
         Task<bool> HardDeletePackageAsync(string id, NuGetVersion version,bool isDelete, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// 是否作者
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> IsAuthorAsync(string id,string userId, CancellationToken cancellationToken);
     }
 
     /// <summary>

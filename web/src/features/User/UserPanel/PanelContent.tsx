@@ -15,8 +15,7 @@ import UserInfo from '../UserInfo';
 const PanelContent = memo<{ closePopover: () => void }>(({ closePopover }) => {
     const navigate = useNavigate();
     const isLoginWithAuth = useUserStore(authSelectors.isLoginWithAuth);
-    const [openSignIn, signOut, openUserProfile] = useUserStore((s) => [
-        s.openLogin,
+    const [signOut, openUserProfile] = useUserStore((s) => [
         s.clerkSignOut,
         s.openUserProfile,
     ]);
@@ -28,7 +27,6 @@ const PanelContent = memo<{ closePopover: () => void }>(({ closePopover }) => {
     };
 
     const handleSignIn = () => {
-        openSignIn();
         closePopover();
         navigate('/login');
     };

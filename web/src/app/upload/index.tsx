@@ -50,7 +50,7 @@ const UploadPage = memo(() => {
 
             // Here we are just logging the files in the NuGet package
             let fileItem: string | null = null;
-            unzipped.forEach((relativePath, file) => {
+            unzipped.forEach((relativePath) => {
                 // 找到.nuspec文件
                 if (relativePath.endsWith('.nuspec')) {
                     fileItem = relativePath;

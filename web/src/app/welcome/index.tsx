@@ -1,4 +1,4 @@
-import { GridShowcase, Input, LogoThree } from "@lobehub/ui";
+import { GridShowcase, Input } from "@lobehub/ui";
 import { Button } from 'antd';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ const Welcome = () => {
                 <Input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    suffix={<Button onClick={()=>{
+                    suffix={<Button onClick={() => {
                         var query = new URLSearchParams();
                         query.set('q', encodeURIComponent(search));
                         navigate(`/packages?${query}`);

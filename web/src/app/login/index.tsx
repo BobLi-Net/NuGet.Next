@@ -1,28 +1,10 @@
 import { memo, useState } from 'react';
 import { message, Input, Button } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone, GithubOutlined, } from '@ant-design/icons';
-import { Footer, GridShowcase, Tooltip } from '@lobehub/ui';
-import styled from 'styled-components';
+import { EyeInvisibleOutlined, EyeTwoTone, } from '@ant-design/icons';
+import { GridShowcase } from '@lobehub/ui';
 import { useNavigate } from 'react-router-dom';
-import Divider from '@lobehub/ui/es/Form/components/FormDivider';
-import Gitee from '@/components/Icon/Gitee';
 import { Authenticate } from '@/services/AuthenticationService';
 import { useUserStore } from '@/store/user';
-
-const FunctionTools = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin: 0 auto;
-    width: 380px;
-    margin-top: 20px;
-    color: #0366d6;
-`;
 
 const LoginPage = memo(() => {
     const navigate = useNavigate();

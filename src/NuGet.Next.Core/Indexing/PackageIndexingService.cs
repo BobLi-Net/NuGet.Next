@@ -13,19 +13,21 @@ public class PackageIndexingService : IPackageIndexingService
     private readonly IPackageDatabase _packages;
     private readonly ISearchIndexer _search;
     private readonly IPackageStorageService _storage;
+    private readonly IUserContext _userContext;
 
     public PackageIndexingService(
         IPackageDatabase packages,
         IPackageStorageService storage,
         ISearchIndexer search,
         NuGetNextOptions options,
-        ILogger<PackageIndexingService> logger)
+        ILogger<PackageIndexingService> logger, IUserContext userContext)
     {
         _packages = packages ?? throw new ArgumentNullException(nameof(packages));
         _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         _search = search ?? throw new ArgumentNullException(nameof(search));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _userContext = userContext;
     }
 
     public async Task<PackageIndexingResult> IndexAsync(Stream packageStream, CancellationToken cancellationToken)
@@ -78,6 +80,12 @@ public class PackageIndexingService : IPackageIndexingService
         if (await _packages.ExistsAsync(package.Id, package.Version, cancellationToken))
         {
             if (!_options.AllowPackageOverwrites) return PackageIndexingResult.PackageAlreadyExists;
+
+            if (!await _packages.IsAuthorAsync(package.Id, _userContext.UserId, cancellationToken))
+            {
+                throw new InvalidOperationException(
+                    $"抱歉，您无权覆盖包 {package.Id} {package.NormalizedVersionString}");
+            }
 
             await _packages.HardDeletePackageAsync(package.Id, package.Version, true, cancellationToken);
             await _storage.DeleteAsync(package.Id, package.Version, cancellationToken);

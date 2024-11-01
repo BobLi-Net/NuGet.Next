@@ -154,5 +154,20 @@ namespace NuGet.Next.Core
 
             return true;
         }
+
+        public Task<bool> IsAuthorAsync(string id, string userId, CancellationToken cancellationToken)
+        {
+            return _context.Packages
+                .Where(p => p.Id == id)
+                .Where(p => p.Creator == userId)
+                .AnyAsync(cancellationToken);
+        }
+
+        public Task<Package?> Find(string id, CancellationToken cancellationToken)
+        {
+            return _context.Packages
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
     }
 }

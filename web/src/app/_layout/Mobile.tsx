@@ -3,7 +3,6 @@ import { memo } from "react";
 const MobileLayout = memo(() => {
     return (
         <div>
-            <Outlet/>
         </div>
     )
 })
