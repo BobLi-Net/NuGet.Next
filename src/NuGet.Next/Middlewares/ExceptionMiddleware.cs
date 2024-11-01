@@ -3,7 +3,7 @@ using NuGet.Next.Protocol.Models;
 
 namespace NuGet.Next.Middlewares;
 
-public class ExceptionMiddleware : IMiddleware, ISingletonDependency
+public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddleware, ISingletonDependency
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -32,6 +32,8 @@ public class ExceptionMiddleware : IMiddleware, ISingletonDependency
             var response = new OkResponse(false, "未授权的访问");
 
             await context.Response.WriteAsJsonAsync(response);
+
+            logger.LogWarning("Unauthorized access to {Path}", context.Request.Path);
         }
         catch (Exception ex)
         {
@@ -41,6 +43,8 @@ public class ExceptionMiddleware : IMiddleware, ISingletonDependency
             var response = new OkResponse(false, "服务器内部错误");
 
             await context.Response.WriteAsJsonAsync(response);
+
+            logger.LogError(ex, "An error occurred while processing {Path}", context.Request.Path);
         }
     }
 }
