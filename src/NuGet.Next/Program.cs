@@ -27,6 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+await app.MigrateDatabase();
+
 app.Configure(builder.Environment, builder.Configuration);
 
 app.UseMiddleware<ExceptionMiddleware>();

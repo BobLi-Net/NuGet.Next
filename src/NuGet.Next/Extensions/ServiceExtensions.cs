@@ -1,6 +1,7 @@
 ﻿using NuGet.Next;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NuGet.Next.Core;
 using NuGet.Next.DM;
@@ -99,5 +100,20 @@ public static class ServiceExtensions
         app.UseRouting();
 
         app.UseCors(ConfigureBaGetOptions.CorsPolicy);
+    }
+
+    /// <summary>
+    /// 迁移数据库
+    /// </summary>
+    public static async Task MigrateDatabase(this IApplicationBuilder app)
+    {
+        var nuGetNextOptions = app.ApplicationServices.GetRequiredService<NuGetNextOptions>();
+
+        if (nuGetNextOptions.RunMigrationsAtStartup)
+        {
+            using var scope = app.ApplicationServices.CreateScope();
+            var database = scope.ServiceProvider.GetRequiredService<IContext>();
+            await database.Database.MigrateAsync();
+        }
     }
 }
