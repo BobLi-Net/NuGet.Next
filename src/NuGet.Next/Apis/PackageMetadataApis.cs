@@ -101,10 +101,6 @@ public class PackageMetadataApis(
         var licenseUrl = package.LicenseUrlString;
         var packageDownloadUrl = urlGenerator.GetPackageDownloadUrl(package.Id, packageVersion);
 
-        package?.PackageTypes.ForEach(x=>x.Package = null);
-        package?.Dependencies.ForEach(x=>x.Package = null);
-        package?.TargetFrameworks.ForEach(x=>x.Package = null);
-        
         return new
         {
             package,

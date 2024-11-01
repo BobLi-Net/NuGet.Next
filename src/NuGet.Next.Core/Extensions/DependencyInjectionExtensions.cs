@@ -173,7 +173,8 @@ namespace NuGet.Next.Core
 
             var assembly = Assembly.GetEntryAssembly();
             var assemblyName = assembly.GetName().Name;
-            var assemblyVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0";
+            var assemblyVersion =
+                assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0";
 
             var client = new HttpClient(new HttpClientHandler
             {
@@ -201,7 +202,7 @@ namespace NuGet.Next.Core
             var options = provider.GetRequiredService<NuGetNextOptions>();
 
             // TODO: Convert to switch expression.
-            if (!options.Mirror.Enabled)
+            if (options?.Mirror?.Enabled is false or null)
             {
                 return provider.GetRequiredService<DisabledUpstreamClient>();
             }

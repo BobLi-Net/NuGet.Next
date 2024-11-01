@@ -41,12 +41,11 @@ const PackageDetails = () => {
         return (
             <Result
                 status="404"
-                title="Oops, package not found..."
-                subTitle={`Could not find package '${id}'.`}
+                title="抱歉，没有找到包。"
+                subTitle={`找不到包 '${id}'.`}
                 extra={
-                    <>
-                        <p>You can try searching on <a href={`https://www.nuget.org/packages?q=${encodeURIComponent(id ?? "")}`} target="_blank" rel="noopener noreferrer">nuget.org</a> package.</p>
-                        <p>Think there's a problem? Consider taking a look at our <a href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">documentation</a> or asking for help on our <a href="https://github.com/loic-sharma/BaGet/issues" target="_blank" rel="noopener noreferrer">GitHub project</a></p>
+                    <><p>您可以尝试在 <a href={`https://www.nuget.org/packages?q=${encodeURIComponent(id ?? "")}`} target="_blank" rel="noopener noreferrer">nuget.org</a> 上搜索包。</p>
+                        <p>觉得有问题？可以查看我们的 <a href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">文档</a> 或在我们的 <a href="https://github.com/loic-sharma/BaGet/issues" target="_blank" rel="noopener noreferrer">GitHub 项目</a> 上寻求帮助。</p>
                     </>
                 }
             />
