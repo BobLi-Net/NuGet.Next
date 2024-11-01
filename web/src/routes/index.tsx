@@ -13,6 +13,9 @@ import AdminCommonHistory from "@/admin/common-history";
 import AdminSettings from "@/admin/settings";
 import PackageManagementPage from "@/admin/package-management";
 import KeyManager from "@/app/key-manager";
+import DocsPage from "@/app/docs";
+import AboutPage from "@/app/about";
+import PrivacyPage from "@/app/privacy";
 
 
 const routes = [
@@ -46,6 +49,18 @@ const routes = [
             {
                 element: <KeyManager />,
                 path: "/key-manager",
+            },
+            {
+                element: <DocsPage />,
+                path: "/docs",
+            },
+            {
+                element: <AboutPage />,
+                path: "/about",
+            },
+            {
+                element: <PrivacyPage />,
+                path: "/privacy",
             }
         ],
     },

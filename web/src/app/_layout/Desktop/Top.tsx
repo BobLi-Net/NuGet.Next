@@ -28,6 +28,14 @@ const Top = memo(() => {
                         {
                             key: 'upload',
                             label: '上传',
+                        },
+                        {
+                            key: 'key-manager',
+                            label: '密钥管理',
+                        },
+                        {
+                            key: 'docs',
+                            label: '文档',
                         }
                     ]} />
             </>}

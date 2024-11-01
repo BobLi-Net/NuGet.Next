@@ -14,8 +14,6 @@ const Packages = memo(() => {
     const [framework, setFramework] = useState(query.framework ?? "Any")
     const [prerelease, setPrerelease] = useState((query.prerelease));
 
-
-
     useEffect(() => {
         const params = new URLSearchParams();
         if (search) {
