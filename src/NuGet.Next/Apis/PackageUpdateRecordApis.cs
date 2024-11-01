@@ -86,6 +86,7 @@ public class PackageUpdateRecordApis(IUserContext userContext, IContext context)
         pageSize = Math.Min(pageSize, 100);
 
         var query = context.PackageUpdateRecords
+            .OrderByDescending(x => x.OperationTime)
             .AsQueryable();
 
         if (userId.Length > 0)
