@@ -34,7 +34,16 @@ const PackageDetails = () => {
     }, [id, version]);
 
     if (loading) {
-        return <Spin tip="Loading..." />;
+        return <>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+            }}>
+                <Spin tip="Loading..." />
+            </div>
+        </>;
     }
 
     if (!detail?.found) {
