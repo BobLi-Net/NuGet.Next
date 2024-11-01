@@ -15,7 +15,7 @@ public class SymbolApis(
         // See: https://docs.microsoft.com/en-us/nuget/api/package-publish-resource#push-a-package
         public async Task Upload(HttpContext context)
         {
-            if (options.IsReadOnlyMode || !await authentication.AuthenticateAsync(context.GetApiKey(), context.RequestAborted))
+            if (options.IsReadOnlyMode || !await authentication.AuthenticateAsync(context))
             {
                 context.Response.StatusCode = 401;
                 return;

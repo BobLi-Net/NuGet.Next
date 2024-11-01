@@ -3,7 +3,7 @@ using NuGet.Versioning;
 namespace NuGet.Next.Core;
 
 // See NuGetGallery's: https://github.com/NuGet/NuGetGallery/blob/master/src/NuGetGallery.Core/Entities/Package.cs
-public class Package
+public class Package : ICreatable, IModifiable
 {
     public int Key { get; set; }
 
@@ -11,13 +11,20 @@ public class Package
 
     public NuGetVersion Version
     {
-        get =>
+        get
+        {
+            if (OriginalVersionString == null && NormalizedVersionString == null)
+            {
+                return NuGetVersion.Parse("0.0.0");
+            }
+
             // Favor the original version string as it contains more information.
             // Packages uploaded with older versions of BaGet may not have the original version string.
-            NuGetVersion.Parse(
+            return NuGetVersion.Parse(
                 OriginalVersionString != null
                     ? OriginalVersionString
                     : NormalizedVersionString);
+        }
 
         set
         {
@@ -68,4 +75,12 @@ public class Package
     public string LicenseUrlString => LicenseUrl?.AbsoluteUri ?? string.Empty;
     public string ProjectUrlString => ProjectUrl?.AbsoluteUri ?? string.Empty;
     public string RepositoryUrlString => RepositoryUrl?.AbsoluteUri ?? string.Empty;
+
+    public DateTime CreatedAt { get; set; }
+
+    public string? Creator { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public string? Modifier { get; set; }
 }

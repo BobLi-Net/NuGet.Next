@@ -11,8 +11,9 @@ public class SqliteContext : AbstractContext<SqliteContext>
     /// </summary>
     private const int SqliteUniqueConstraintViolationErrorCode = 19;
 
-    public SqliteContext(DbContextOptions<SqliteContext> options)
-        : base(options)
+
+    public SqliteContext(DbContextOptions<SqliteContext> options, IServiceProvider serviceProvider)
+        : base(options, serviceProvider)
     {
     }
 
@@ -44,34 +45,5 @@ public class SqliteContext : AbstractContext<SqliteContext>
         builder.Entity<TargetFramework>()
             .Property(f => f.Moniker)
             .HasColumnType("TEXT COLLATE NOCASE");
-
-        builder.Entity<User>((option) =>
-        {
-            option.HasKey(x => x.Id);
-
-            option.HasIndex(x => x.Username).IsUnique();
-
-            option.Property(x => x.Username).IsRequired();
-
-            option.Property(x => x.Email).IsRequired(false);
-        });
-
-        builder.Entity<UserKey>(option =>
-        {
-            option.HasKey(x => x.Id);
-            
-            option.Property(x=>x.Key).ValueGeneratedOnAdd();
-            
-            option.Property(x => x.CreatedTime).IsRequired();
-            
-            option.Property(x => x.UserId).IsRequired();
-            
-            // 配置逻辑外键
-            option.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
-            
-            option.HasIndex(x => x.Key).IsUnique();
-            
-            option.HasIndex(x => x.UserId).IsUnique();
-        });
     }
 }

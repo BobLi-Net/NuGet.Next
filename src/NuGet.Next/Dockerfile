@@ -1,0 +1,35 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM node as lobe
+WORKDIR /src
+COPY lobe .
+RUN yarn
+RUN npm i
+RUN yarn run build
+
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["src/NuGet.Next/NuGet.Next.csproj", "src/NuGet.Next/"]
+COPY ["src/NuGet.Next.Core/NuGet.Next.Core.csproj", "src/NuGet.Next.Core/"]
+COPY ["src/NuGet.Next.Protocol/NuGet.Next.Protocol.csproj", "src/NuGet.Next.Protocol/"]
+COPY ["src/NuGet.Next.Sqlite/NuGet.Next.Sqlite.csproj", "src/NuGet.Next.Sqlite/"]
+RUN dotnet restore "src/NuGet.Next/NuGet.Next.csproj"
+COPY . .
+WORKDIR "/src/src/NuGet.Next"
+RUN dotnet build "NuGet.Next.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "NuGet.Next.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+COPY --from=lobe /src/dist ./wwwroot
+ENTRYPOINT ["dotnet", "NuGet.Next.dll"]

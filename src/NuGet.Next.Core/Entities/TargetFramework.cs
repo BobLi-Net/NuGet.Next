@@ -6,5 +6,7 @@ public class TargetFramework
 
     public string? Moniker { get; set; }
 
+    public string PackageId { get; set; }
+    
     public Package Package { get; set; }
 }

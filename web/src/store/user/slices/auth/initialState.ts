@@ -8,10 +8,19 @@ export interface UserAuthState {
   clerkSignOut?: any;
   clerkUser?: any;
   isLoaded?: boolean;
-  isSignedIn?: boolean;
+  isSignedIn: boolean;
   user?: User;
+}
+
+function userInfo() {
+  const user = localStorage.getItem('user');
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
 }
 
 export const initialAuthState: UserAuthState = {
   isSignedIn: localStorage.getItem('token') ? true : false,
+  user: userInfo()
 };

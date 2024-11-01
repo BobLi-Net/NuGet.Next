@@ -79,7 +79,7 @@ public class PackageIndexingService : IPackageIndexingService
         {
             if (!_options.AllowPackageOverwrites) return PackageIndexingResult.PackageAlreadyExists;
 
-            await _packages.HardDeletePackageAsync(package.Id, package.Version, cancellationToken);
+            await _packages.HardDeletePackageAsync(package.Id, package.Version, true, cancellationToken);
             await _storage.DeleteAsync(package.Id, package.Version, cancellationToken);
         }
 

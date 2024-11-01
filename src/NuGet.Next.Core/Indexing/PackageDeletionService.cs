@@ -64,7 +64,7 @@ public class PackageDeletionService : IPackageDeletionService
             id,
             version);
 
-        var found = await _packages.HardDeletePackageAsync(id, version, cancellationToken);
+        var found = await _packages.HardDeletePackageAsync(id, version, false, cancellationToken);
         if (!found)
             _logger.LogWarning(
                 "Could not find package {PackageId} {PackageVersion} in the database",

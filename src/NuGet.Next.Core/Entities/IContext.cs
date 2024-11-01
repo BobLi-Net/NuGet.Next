@@ -8,6 +8,16 @@ public interface IContext
     DatabaseFacade Database { get; }
 
     DbSet<Package> Packages { get; set; }
+    
+    DbSet<User> Users { get; set; }
+    
+    DbSet<UserKey> UserKeys { get; set; }
+    
+    DbSet<PackageDependency> PackageDependencies { get; set; }
+    
+    DbSet<TargetFramework> TargetFrameworks { get; set; }
+    
+    DbSet<PackageUpdateRecord> PackageUpdateRecords { get; set; }
 
     /// <summary>
     ///     Whether this database engine supports LINQ "Take" in subqueries.

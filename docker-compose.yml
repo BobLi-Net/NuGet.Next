@@ -1,0 +1,6 @@
+﻿services:
+  nuget.next:
+    image: nuget-next
+    build:
+      context: .
+      dockerfile: src/NuGet.Next/Dockerfile

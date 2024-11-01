@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
+using NuGet.Next.Core.Infrastructure;
 
 namespace NuGet.Next.Core;
 
@@ -18,9 +20,12 @@ public abstract class AbstractContext<TContext> : DbContext, IContext where TCon
 
     public const int MaxPackageDependencyVersionRangeLength = 256;
 
-    public AbstractContext(DbContextOptions<TContext> options)
+    private IUserContext _userContext;
+
+    public AbstractContext(DbContextOptions<TContext> options, IServiceProvider serviceProvider)
         : base(options)
     {
+        _userContext = serviceProvider.GetService<IUserContext>();
     }
 
     public DbSet<PackageDependency> PackageDependencies { get; set; }
@@ -28,6 +33,9 @@ public abstract class AbstractContext<TContext> : DbContext, IContext where TCon
     public DbSet<TargetFramework> TargetFrameworks { get; set; }
 
     public DbSet<Package> Packages { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<UserKey> UserKeys { get; set; }
+    public DbSet<PackageUpdateRecord> PackageUpdateRecords { get; set; }
 
     public virtual async Task RunMigrationsAsync(CancellationToken cancellationToken)
     {
@@ -49,6 +57,80 @@ public abstract class AbstractContext<TContext> : DbContext, IContext where TCon
         builder.Entity<PackageDependency>(BuildPackageDependencyEntity);
         builder.Entity<PackageType>(BuildPackageTypeEntity);
         builder.Entity<TargetFramework>(BuildTargetFrameworkEntity);
+
+
+        builder.Entity<User>((option) =>
+        {
+            option.HasKey(x => x.Id);
+
+            option.HasIndex(x => x.Username).IsUnique();
+
+            option.Property(x => x.Username).IsRequired();
+
+            option.Property(x => x.Email).IsRequired(false);
+        });
+
+        builder.Entity<UserKey>(option =>
+        {
+            option.HasKey(x => x.Id);
+
+            option.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+            option.Property(x => x.CreatedTime).IsRequired();
+
+            option.Property(x => x.UserId).IsRequired();
+
+            option.HasIndex(x => x.Key).IsUnique();
+
+            option.HasIndex(x => x.UserId);
+        });
+
+        builder.Entity<PackageUpdateRecord>(option =>
+        {
+            option.HasKey(x => x.Id);
+
+            option.Property(x => x.Id).ValueGeneratedOnAdd();
+
+            option.Property(x => x.PackageId).IsRequired();
+
+            option.Property(x => x.Version).IsRequired();
+
+            option.Property(x => x.OperationTime).IsRequired();
+
+            option.Property(x => x.UserId).IsRequired();
+
+            option.Property(x => x.OperationType).IsRequired();
+
+            option.HasIndex(x => x.PackageId);
+
+            option.HasIndex(x => x.UserId);
+        });
+
+        InitSeedData(builder);
+    }
+
+    /// <summary>
+    /// 初始化种子数据
+    /// </summary>
+    private void InitSeedData(ModelBuilder builder)
+    {
+        var user = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            Username = "admin",
+            Email = "239573049@qq.com",
+            Role = RoleConstant.Admin,
+            Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
+            FullName = "token",
+        };
+        user.SetPassword("Aa123456.");
+
+        builder.Entity<User>().HasData(user);
+
+        var userKey = new UserKey(user.Id);
+
+        builder.Entity<UserKey>().HasData(userKey);
     }
 
     private void BuildPackageEntity(EntityTypeBuilder<Package> package)
@@ -159,5 +241,79 @@ public abstract class AbstractContext<TContext> : DbContext, IContext where TCon
         targetFramework.HasIndex(f => f.Moniker);
 
         targetFramework.Property(f => f.Moniker).HasMaxLength(MaxTargetFrameworkLength);
+    }
+
+    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = new CancellationToken())
+    {
+        await BeforeSaveChanges();
+        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    private async Task BeforeSaveChanges()
+    {
+        var entries = ChangeTracker.Entries().Where(e => e.Entity is ICreatable or IModifiable);
+
+        var packages = new List<(string, Package)>();
+
+        foreach (var entry in entries)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    if (entry.Entity is ICreatable creatable)
+                    {
+                        creatable.CreatedAt = DateTime.Now;
+                        if (_userContext.IsAuthenticated)
+                        {
+                            creatable.Creator = _userContext.UserId;
+                        }
+                    }
+
+                    break;
+
+                case EntityState.Modified:
+                    if (entry.Entity is IModifiable modifiable)
+                    {
+                        modifiable.UpdatedAt = DateTime.Now;
+                        if (_userContext.IsAuthenticated)
+                        {
+                            modifiable.Modifier = _userContext.UserId;
+                        }
+                    }
+
+                    break;
+            }
+
+            if (entry.Entity is not Package package) continue;
+            var type = entry.State switch
+            {
+                EntityState.Added => "添加新包",
+                EntityState.Modified => "更新包",
+                EntityState.Deleted => "删除包",
+                _ => "未知操作",
+            };
+            packages.Add((type, package));
+        }
+
+        foreach (var item in packages)
+        {
+            await AddPackageRecordAsync(item.Item2.Id, item.Item2.Version.ToString(), item.Item1);
+        }
+    }
+
+    public async Task AddPackageRecordAsync(string packageId, string version, string operationType)
+    {
+        var record = new PackageUpdateRecord
+        {
+            PackageId = packageId,
+            Version = version,
+            OperationTime = DateTime.Now,
+            UserId = _userContext.UserId,
+            OperationType = operationType,
+            OperationIP = _userContext.IpAddress,
+            OperationDescription = string.Empty,
+        };
+        await PackageUpdateRecords.AddAsync(record);
     }
 }

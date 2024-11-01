@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NuGet.Next.Options;
 using NuGet.Next.Protocol;
+using Thor.Service.Infrastructure.Helper;
 
 namespace NuGet.Next.Core
 {
@@ -25,6 +26,8 @@ namespace NuGet.Next.Core
 
             services.AddFallbackServices();
 
+            services.AddTransient<JwtHelper>();
+            services.AddScoped<IUserContext, UserContext>();
             return services;
         }
 

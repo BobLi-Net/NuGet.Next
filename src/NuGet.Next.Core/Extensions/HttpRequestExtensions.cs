@@ -1,4 +1,4 @@
-﻿using NuGet.Next.Core;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace NuGet.Next.Extensions;
 

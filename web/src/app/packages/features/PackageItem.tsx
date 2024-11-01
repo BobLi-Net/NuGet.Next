@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Image, Typography, List, Tag } from 'antd';
 import { DownloadOutlined, FlagOutlined, TagOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -18,6 +19,8 @@ interface PackageItemProps {
 }
 
 const PackageItem: React.FC<PackageItemProps> = ({ packageItem }) => {
+    const navigate = useNavigate();
+
     return (
         <Row className="search-result" gutter={[16, 16]}>
             <Col xs={0} sm={0} md={1}>
@@ -32,9 +35,16 @@ const PackageItem: React.FC<PackageItemProps> = ({ packageItem }) => {
             <Col xs={24} sm={24} md={23}>
                 <div>
                     <Title level={4}>
-                        <a href={`/Package/${packageItem.id}/${packageItem.version}`} className="package-title">
+                        <span
+                            style={{
+                                cursor: 'pointer',
+                                color: '#1890ff',
+                            }}
+                            onClick={() => {
+                                navigate(`/packages/${packageItem.id}/${packageItem.version}`);
+                            }} className="package-title">
                             {packageItem.id}
-                        </a>
+                        </span>
                     </Title>
                     <Text>by: {packageItem.authors?.join(' ')}</Text>
                 </div>

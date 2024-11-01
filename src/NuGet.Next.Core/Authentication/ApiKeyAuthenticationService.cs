@@ -1,28 +1,79 @@
-using NuGet.Next.Options;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Internal;
+using NuGet.Next.Extensions;
+using Thor.Service.Infrastructure.Helper;
 
 namespace NuGet.Next.Core;
 
-public class ApiKeyAuthenticationService : IAuthenticationService
+public class ApiKeyAuthenticationService(IContext context, JwtHelper jwtHelper)
+    : IAuthenticationService
 {
-    private readonly string _apiKey;
-
-    public ApiKeyAuthenticationService(NuGetNextOptions options)
+    public async Task<bool> AuthenticateAsync(HttpContext httpContext)
     {
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        var apiKey = httpContext.GetApiKey();
 
-        // _apiKey = string.IsNullOrEmpty(options.ApiKey) ? null : options.ApiKey;
+        if (apiKey == null)
+            return false;
+
+        if (apiKey.StartsWith("key-"))
+        {
+            var result = await (from key in context.UserKeys
+                join user in context.Users
+                    on key.UserId equals user.Id into userGroup
+                from user in userGroup.DefaultIfEmpty()
+                where key.Key == apiKey && key.Enabled
+                select user).FirstOrDefaultAsync();
+
+            if (result == null)
+                return false;
+            
+            // 将用户信息设置到上下文中
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(jwtHelper.GetClaimsFromToken(result)));
+            
+            return true;
+        }
+        else
+        {
+            var (id, role, fullName) = jwtHelper.GetUserFromToken(apiKey);
+
+            if (id == null)
+                return false;
+
+            // 判断用户是否存在
+            var query = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            return query != null;
+        }
     }
 
-    public Task<bool> AuthenticateAsync(string apiKey, CancellationToken cancellationToken)
+    public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticateInput input)
     {
-        return Task.FromResult(Authenticate(apiKey));
-    }
+        var query = await context.Users.Where(u => u.Username == input.Username)
+            .FirstOrDefaultAsync();
 
-    private bool Authenticate(string apiKey)
-    {
-        // No authentication is necessary if there is no required API key.
-        if (_apiKey == null) return true;
+        if (query == null)
+        {
+            return new AuthenticationResponse
+            {
+                Success = false,
+                Message = "用户不存在"
+            };
+        }
 
-        return _apiKey == apiKey;
+        if (!query.VerifyPassword(input.Password))
+            return new AuthenticationResponse
+            {
+                Success = false,
+                Message = "密码错误"
+            };
+
+        var token = jwtHelper.CreateToken(query);
+
+        return new AuthenticationResponse
+        {
+            Success = true,
+            Token = token
+        };
     }
 }

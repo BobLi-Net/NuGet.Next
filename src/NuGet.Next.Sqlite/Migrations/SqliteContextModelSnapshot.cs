@@ -28,6 +28,12 @@ namespace NuGet.Next.Sqlite.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Creator")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasMaxLength(4000)
                         .HasColumnType("TEXT");
@@ -66,6 +72,9 @@ namespace NuGet.Next.Sqlite.Migrations
 
                     b.Property<string>("MinClientVersion")
                         .HasMaxLength(44)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Modifier")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedVersionString")
@@ -121,6 +130,9 @@ namespace NuGet.Next.Sqlite.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Key");
 
                     b.HasIndex("Id");
@@ -141,7 +153,11 @@ namespace NuGet.Next.Sqlite.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT COLLATE NOCASE");
 
-                    b.Property<int?>("PackageKey")
+                    b.Property<string>("PackageId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PackageKey")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TargetFramework")
@@ -187,6 +203,48 @@ namespace NuGet.Next.Sqlite.Migrations
                     b.ToTable("PackageTypes");
                 });
 
+            modelBuilder.Entity("NuGet.Next.Core.PackageUpdateRecord", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OperationDescription")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OperationIP")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OperationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OperationType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PackageId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PackageUpdateRecords");
+                });
+
             modelBuilder.Entity("NuGet.Next.Core.TargetFramework", b =>
                 {
                     b.Property<int>("Key")
@@ -196,6 +254,10 @@ namespace NuGet.Next.Sqlite.Migrations
                     b.Property<string>("Moniker")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT COLLATE NOCASE");
+
+                    b.Property<string>("PackageId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PackageKey")
                         .HasColumnType("INTEGER");
@@ -209,11 +271,104 @@ namespace NuGet.Next.Sqlite.Migrations
                     b.ToTable("TargetFrameworks");
                 });
 
+            modelBuilder.Entity("NuGet.Next.Core.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b37b542c-2dac-4d79-85c0-5ff7419a17d5",
+                            Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
+                            Email = "239573049@qq.com",
+                            FullName = "token",
+                            Password = "16f0836f1e404d2cc9a88934a06c457a",
+                            PasswordHash = "c556c15f9dcd4dc093176f8e30c207e6",
+                            Role = "admin",
+                            Username = "admin"
+                        });
+                });
+
+            modelBuilder.Entity("NuGet.Next.Core.UserKey", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserKeys");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "3a432a83f5ad4ed2aeb111f191c74e52",
+                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 2, 12, 14, 950, DateTimeKind.Unspecified).AddTicks(2718), new TimeSpan(0, 8, 0, 0, 0)),
+                            Enabled = true,
+                            Key = "key-d25c8efb94074541873447b65f7bc7c2",
+                            UserId = "b37b542c-2dac-4d79-85c0-5ff7419a17d5"
+                        });
+                });
+
             modelBuilder.Entity("NuGet.Next.Core.PackageDependency", b =>
                 {
                     b.HasOne("NuGet.Next.Core.Package", "Package")
                         .WithMany("Dependencies")
-                        .HasForeignKey("PackageKey");
+                        .HasForeignKey("PackageKey")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Package");
                 });
@@ -238,6 +393,17 @@ namespace NuGet.Next.Sqlite.Migrations
                         .IsRequired();
 
                     b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("NuGet.Next.Core.UserKey", b =>
+                {
+                    b.HasOne("NuGet.Next.Core.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NuGet.Next.Core.Package", b =>

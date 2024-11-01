@@ -17,5 +17,7 @@ public class PackageDependency
 
     public string? TargetFramework { get; set; }
 
+    public string PackageId { get; set; }
+
     public Package Package { get; set; }
 }

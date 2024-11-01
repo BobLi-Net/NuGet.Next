@@ -91,9 +91,10 @@ namespace NuGet.Next.Core
         /// </summary>
         /// <param name="id">The id of the package to remove.</param>
         /// <param name="version">The version of the pacakge to remove.</param>
+        /// <param name="isDelete"></param>
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>False if the package doesn't exist.</returns>
-        Task<bool> HardDeletePackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
+        Task<bool> HardDeletePackageAsync(string id, NuGetVersion version,bool isDelete, CancellationToken cancellationToken);
     }
 
     /// <summary>

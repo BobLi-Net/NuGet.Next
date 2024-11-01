@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,17 +21,23 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="DataAccess\" />
+        <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\NuGet.Next.Core\NuGet.Next.Core.csproj" />
+      <ProjectReference Include="..\NuGet.Next.DM\NuGet.Next.DM.csproj" />
+      <ProjectReference Include="..\NuGet.Next.MySql\NuGet.Next.MySql.csproj" />
+      <ProjectReference Include="..\NuGet.Next.PostgreSql\NuGet.Next.PostgreSql.csproj" />
       <ProjectReference Include="..\NuGet.Next.Sqlite\NuGet.Next.Sqlite.csproj" />
+      <ProjectReference Include="..\NuGet.Next.SqlServer\NuGet.Next.SqlServer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

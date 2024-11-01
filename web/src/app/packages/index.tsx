@@ -271,19 +271,30 @@ const Packages = memo(() => {
                     ]}
                 >
                 </Select>
-                <Checkbox style={{
-                    marginLeft: 8
-                }} checked={prerelease} onChange={(e) => {
-                    setPrerelease(e.target.checked);
+                <div onClick={() => {
+                    setPrerelease(!prerelease);
                 }}>
-                    <span style={{
-                        marginRight: 8,
-                        textAlign: 'center',
-                        fontSize: 18,
+                    <Checkbox style={{
+                        marginLeft: 8,
                         marginTop: 5
+                    }} checked={prerelease} onChange={(e) => {
+                        setPrerelease(e.target.checked);
                     }}>
+
+                    </Checkbox>
+                    <div
+                        style={{
+                            marginRight: 8,
+                            textAlign: 'center',
+                            float: 'right',
+                            fontSize: 18,
+                            marginLeft: 8,
+                            marginTop: 5,
+                            cursor: 'pointer'
+                        }}>
                         包含预发行
-                    </span></Checkbox>
+                    </div>
+                </div>
             </Flexbox>
             <PackageList />
         </Flexbox>

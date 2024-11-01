@@ -29,6 +29,8 @@ public class DatabaseSearchService : ISearchService
             request.PackageType,
             frameworks);
 
+        var totalHits = await search.CountAsync(cancellationToken);
+        
         var packageIds = search
             .Select(p => p.Id)
             .Distinct()
@@ -66,7 +68,11 @@ public class DatabaseSearchService : ISearchService
             .Select(group => new PackageRegistration(group.Key, group.ToList()))
             .ToList();
 
-        return _searchBuilder.BuildSearch(groupedResults);
+        var result = _searchBuilder.BuildSearch(groupedResults);
+        
+        result.TotalHits = totalHits;
+        
+        return result;
     }
 
     public async Task<AutocompleteResponse> AutocompleteAsync(

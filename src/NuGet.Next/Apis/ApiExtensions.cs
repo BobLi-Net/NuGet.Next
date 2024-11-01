@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Next.Core;
 using NuGet.Next.Options;
+using NuGet.Next.Protocol.Models;
 
 namespace NuGet.Next.Service;
 
@@ -10,6 +12,7 @@ public static class ApiExtensions
         var options = app.ServiceProvider.GetRequiredService<NuGetNextOptions>();
 
         var group = app.MapGroup(options.PathBase ?? "/");
+
 
         group.Map("/v3/package/{id}/index.json",
                 async (PackageApis apis, HttpContext context, string id) =>
@@ -36,6 +39,17 @@ public static class ApiExtensions
                     await apis.DownloadIconAsync(context, id, version))
             .WithOpenApi();
 
+        group.MapGet("v3/package/list",
+                async (PackageApis apis, HttpContext context, int page, int pageSize,
+                        string? keyword, string[] userIds) =>
+                    await apis.GetListAsync(page, pageSize, keyword, userIds))
+            .WithOpenApi();
+
+        group.MapDelete("v3/package/{id}/{version}",
+                async (PackageApis apis, string id, string version) =>
+                    await apis.DeleteAsync(id, version))
+            .WithOpenApi();
+
         group.Map("/v3/registration/{id}/index.json",
                 async (PackageMetadataApis apis, HttpContext context, string id) =>
                     await apis.RegistrationIndexAsync(context, id))
@@ -44,6 +58,16 @@ public static class ApiExtensions
         group.Map("/v3/registration/{id}/{version}.json",
                 async (PackageMetadataApis apis, HttpContext context, string id, string version) =>
                     await apis.RegistrationLeafAsync(context, id, version))
+            .WithOpenApi();
+
+        group.MapGet("v3/package-info/{id}/{version}",
+                async (PackageMetadataApis apis, HttpContext context, string id, string version) =>
+                    await apis.GetAsync(context, id, version))
+            .WithOpenApi();
+
+        group.MapGet("v3/package-info/{id}",
+                async (PackageMetadataApis apis, HttpContext context, string id) =>
+                    await apis.GetAsync(context, id, string.Empty))
             .WithOpenApi();
 
         group.MapPut("api/v2/package",
@@ -99,15 +123,76 @@ public static class ApiExtensions
                 async (ServiceIndexService apis, HttpContext context) =>
                     await apis.GetAsync(context.RequestAborted))
             .WithOpenApi();
-        
+
         group.MapPut("api/v2/symbol",
                 async (SymbolApis apis, HttpContext context) =>
                     await apis.Upload(context))
             .WithOpenApi();
-        
+
         group.MapGet("api/download/symbols/{file}/{key}/{file2}",
                 async (SymbolApis apis, HttpContext context, string file, string key, string file2) =>
                     await apis.Get(context, file, key))
+            .WithOpenApi();
+
+
+        group.MapPost("api/v2/authenticate",
+                async (AuthenticationApis apis, AuthenticateInput input) =>
+                    await apis.AuthenticateAsync(input))
+            .WithOpenApi();
+
+        group.MapGet("api/v3/package-update-record",
+                async (PackageUpdateRecordApis apis, int page, int pageSize) =>
+                    await apis.GetCurrentAsync(page, pageSize))
+            .WithOpenApi();
+
+        group.MapGet("api/v3/package-update-record/by-user",
+                async (PackageUpdateRecordApis apis, string[] userId, int page, int pageSize) =>
+                    await apis.GetByUserIdAsync(userId, page, pageSize))
+            .WithOpenApi();
+
+        var user = group.MapGroup("api/v3/user");
+
+        user.MapPost(string.Empty,
+                async (UserApis apis, UserInput input) =>
+                    await apis.CreateAsync(input))
+            .WithOpenApi();
+
+        user.MapGet(string.Empty,
+                async (UserApis apis, string? keyword, int page, int pageSize) =>
+                    await apis.GetAsync(keyword, page, pageSize))
+            .WithOpenApi();
+
+        user.MapDelete("{id}",
+                async (UserApis apis, string id) =>
+                    await apis.DeleteAsync(id))
+            .WithOpenApi();
+
+        user.MapPut("update-password",
+                async (UserApis apis, UpdatePasswordInput input) =>
+                    await apis.UpdatePasswordAsync(input))
+            .WithOpenApi();
+
+
+        var userKey = group.MapGroup("api/v3/user-key");
+
+        userKey.MapPost(string.Empty,
+                async (UserKeyApis apis) =>
+                    await apis.CreateAsync())
+            .WithOpenApi();
+
+        userKey.MapGet(string.Empty,
+                async (UserKeyApis apis) =>
+                    await apis.GetListAsync())
+            .WithOpenApi();
+
+        userKey.MapDelete("{id}",
+                async (UserKeyApis apis, string id) =>
+                    await apis.DeleteAsync(id))
+            .WithOpenApi();
+
+        userKey.MapPut("enable/{id}",
+                async (UserKeyApis apis, string id) =>
+                    await apis.EnableAsync(id))
             .WithOpenApi();
 
         return app;

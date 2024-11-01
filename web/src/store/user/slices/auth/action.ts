@@ -10,22 +10,27 @@ export interface UserAuthAction {
   /**
    * universal login method
    */
-  openLogin: () => Promise<void>;
+  openLogin: (token: string) => Promise<void>;
   openUserProfile: () => Promise<void>;
 }
 
 export const createAuthSlice: StateCreator<
   UserStore,
-  [["zustand/devtools",never]],
+  [["zustand/devtools", never]],
   [],
   UserAuthAction
 > = (set, get) => ({
   logout: async () => {
     localStorage.removeItem('token');
+    set({ isSignedIn: false });
   },
-  openLogin: async () => {
-    // open login modal
-    
+  openLogin: async (token: string) => {
+    localStorage.setItem('token', token);
+    // 解析jwt token，获取用户信息
+    const user = JSON.parse(atob(token.split('.')[1]));
+    localStorage.setItem('user', user.User);
+
+    set({ isSignedIn: true, user: JSON.parse(user.User) });
   },
 
   openUserProfile: async () => {

@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using NuGet.Next.Core;
+using NuGet.Next.DM;
+using NuGet.Next.MySql;
 using NuGet.Next.Options;
+using NuGet.Next.PostgreSql;
+using NuGet.Next.SqlServer;
 
 namespace NuGet.Next.Extensions;
 
@@ -20,7 +24,36 @@ public static class ServiceExtensions
         services.AddTransient<IValidateOptions<NuGetNextOptions>, ConfigureBaGetOptions>();
 
         services.AddBaGetOptions<IISServerOptions>(nameof(IISServerOptions));
-        services.AddBaGetApplication(application => BaGetApplication(application));
+        services.AddBaGetApplication(application =>
+        {
+            BaGetApplication(application);
+
+            var option = configuration.Get<NuGetNextOptions>();
+            if (option!.Database.Type.Equals("PostgreSql", StringComparison.OrdinalIgnoreCase))
+            {
+                application.AddPostgreSqlDatabase();
+            }
+            else if (option.Database.Type.Equals("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                application.AddSqliteDatabase();
+            }
+            else if (option.Database.Type.Equals("MySql", StringComparison.OrdinalIgnoreCase))
+            {
+                application.AddMySqlDatabase();
+            }
+            else if (option.Database.Type.Equals("SqlServer", StringComparison.OrdinalIgnoreCase))
+            {
+                application.AddSqlServerDatabase();
+            }
+            else if (option.Database.Type.Equals("DM", StringComparison.OrdinalIgnoreCase))
+            {
+                application.AddDMDatabase();
+            }
+            else
+            {
+                throw new NotSupportedException($"Database type '{option.Database.Type}' is not supported.");
+            }
+        });
 
         // You can swap between implementations of subsystems like storage and search using BaGet's configuration.
         // Each subsystem's implementation has a provider that reads the configuration to determine if it should be
@@ -49,7 +82,7 @@ public static class ServiceExtensions
         return app;
     }
 
-    public static void Configure(this IApplicationBuilder app, IWebHostEnvironment env,IConfiguration configuration)
+    public static void Configure(this IApplicationBuilder app, IWebHostEnvironment env, IConfiguration configuration)
     {
         var options = configuration.Get<NuGetNextOptions>();
 
@@ -66,6 +99,5 @@ public static class ServiceExtensions
         app.UseRouting();
 
         app.UseCors(ConfigureBaGetOptions.CorsPolicy);
-
     }
 }

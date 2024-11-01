@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 
 namespace NuGet.Next.Core
@@ -21,6 +15,10 @@ namespace NuGet.Next.Core
         {
             try
             {
+                package.TargetFrameworks.ForEach(x=>x.PackageId = package.Id);
+                package.Dependencies.ForEach(x=>x.PackageId = package.Id);
+                
+                
                 _context.Packages.Add(package);
 
                 await _context.SaveChangesAsync(cancellationToken);
@@ -51,7 +49,8 @@ namespace NuGet.Next.Core
                 .AnyAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<Package>> FindAsync(string id, bool includeUnlisted, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Package>> FindAsync(string id, bool includeUnlisted,
+            CancellationToken cancellationToken)
         {
             var query = _context.Packages
                 .Include(p => p.Dependencies)
@@ -87,61 +86,73 @@ namespace NuGet.Next.Core
             return query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public Task<bool> UnlistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
+        public async Task<bool> UnlistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
         {
-            return TryUpdatePackageAsync(id, version, p => p.Listed = false, cancellationToken);
+            var result = await _context.Packages
+                .Where(x => x.Id == id && x.NormalizedVersionString == version.ToNormalizedString())
+                .ExecuteUpdateAsync(x => x.SetProperty(i => i.Listed, false), cancellationToken);
+            return result > 0;
         }
 
-        public Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
+        public async Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
         {
-            return TryUpdatePackageAsync(id, version, p => p.Listed = true, cancellationToken);
+            var result = await _context.Packages
+                .Where(x => x.Id == id && x.NormalizedVersionString == version.ToNormalizedString())
+                .ExecuteUpdateAsync(x => x.SetProperty(i => i.Listed, true), cancellationToken);
+            return result > 0;
         }
 
         public async Task AddDownloadAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
         {
-            await TryUpdatePackageAsync(id, version, p => p.Downloads += 1, cancellationToken);
+            await _context.Packages.Where(x => x.Id == id && x.NormalizedVersionString == version.ToNormalizedString())
+                .ExecuteUpdateAsync(x => x.SetProperty(i => i.Downloads, i => i.Downloads + 1), cancellationToken);
         }
 
-        public async Task<bool> HardDeletePackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
-        {
-            var package = await _context.Packages
-                .Where(p => p.Id == id)
-                .Where(p => p.NormalizedVersionString == version.ToNormalizedString())
-                .Include(p => p.Dependencies)
-                .Include(p => p.TargetFrameworks)
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (package == null)
-            {
-                return false;
-            }
-
-            _context.Packages.Remove(package);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return true;
-        }
-
-        private async Task<bool> TryUpdatePackageAsync(
-            string id,
-            NuGetVersion version,
-            Action<Package> action,
+        public async Task<bool> HardDeletePackageAsync(string id, NuGetVersion version,
+            bool isDelete,
             CancellationToken cancellationToken)
         {
-            var package = await _context.Packages
-                .Where(p => p.Id == id)
-                .Where(p => p.NormalizedVersionString == version.ToNormalizedString())
-                .FirstOrDefaultAsync();
-
-            if (package != null)
+            // 如果是需要直接删除则不会记录日志
+            if (isDelete)
             {
-                action(package);
-                await _context.SaveChangesAsync(cancellationToken);
+                var result = await _context.Packages
+                    .Where(p => p.Id == id)
+                    .Where(p => p.NormalizedVersionString == version.ToNormalizedString())
+                    .ExecuteDeleteAsync(cancellationToken: cancellationToken);
 
-                return true;
+                if (result > 0)
+                {
+                    await _context.PackageDependencies
+                        .Where(d => d.PackageId == id)
+                        .ExecuteDeleteAsync(cancellationToken: cancellationToken);
+
+                    await _context.TargetFrameworks
+                        .Where(t => t.PackageId == id)
+                        .ExecuteDeleteAsync(cancellationToken: cancellationToken);
+
+                    return true;
+                }
+            }
+            else
+            {
+                var package = await _context.Packages
+                    .Where(p => p.Id == id)
+                    .Where(p => p.NormalizedVersionString == version.ToNormalizedString())
+                    .Include(p => p.Dependencies)
+                    .Include(p => p.TargetFrameworks)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (package == null)
+                {
+                    return false;
+                }
+
+                _context.Packages.Remove(package);
+                await _context.SaveChangesAsync(cancellationToken);
             }
 
-            return false;
+
+            return true;
         }
     }
 }

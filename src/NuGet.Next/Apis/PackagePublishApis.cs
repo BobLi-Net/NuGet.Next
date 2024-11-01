@@ -19,45 +19,36 @@ public class PackagePublishApis(
     public async Task UploadAsync(HttpContext context)
     {
         if (options.IsReadOnlyMode ||
-            !await authentication.AuthenticateAsync(context.GetApiKey(), context.RequestAborted))
+            !await authentication.AuthenticateAsync(context))
         {
             context.Response.StatusCode = 401;
             return;
         }
 
-        try
+        using (var uploadStream = await context.GetUploadStreamOrNullAsync(context.RequestAborted))
         {
-            using (var uploadStream = await context.GetUploadStreamOrNullAsync(context.RequestAborted))
+            if (uploadStream == null)
             {
-                if (uploadStream == null)
-                {
-                    context.Response.StatusCode = 400;
-                    return;
-                }
-
-                var result = await indexer.IndexAsync(uploadStream, context.RequestAborted);
-
-                switch (result)
-                {
-                    case PackageIndexingResult.InvalidPackage:
-                        context.Response.StatusCode = 400;
-                        break;
-
-                    case PackageIndexingResult.PackageAlreadyExists:
-                        context.Response.StatusCode = 409;
-                        break;
-
-                    case PackageIndexingResult.Success:
-                        context.Response.StatusCode = 201;
-                        break;
-                }
+                context.Response.StatusCode = 400;
+                return;
             }
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Exception thrown during package upload");
 
-            context.Response.StatusCode = 500;
+            var result = await indexer.IndexAsync(uploadStream, context.RequestAborted);
+
+            switch (result)
+            {
+                case PackageIndexingResult.InvalidPackage:
+                    context.Response.StatusCode = 400;
+                    break;
+
+                case PackageIndexingResult.PackageAlreadyExists:
+                    context.Response.StatusCode = 409;
+                    break;
+
+                case PackageIndexingResult.Success:
+                    context.Response.StatusCode = 201;
+                    break;
+            }
         }
     }
 
@@ -75,7 +66,7 @@ public class PackagePublishApis(
             return;
         }
 
-        if (!await authentication.AuthenticateAsync(context.GetApiKey(), context.RequestAborted))
+        if (!await authentication.AuthenticateAsync(context))
         {
             context.Response.StatusCode = 401;
             return;
@@ -106,7 +97,7 @@ public class PackagePublishApis(
             return;
         }
 
-        if (!await authentication.AuthenticateAsync(context.GetApiKey(), context.RequestAborted))
+        if (!await authentication.AuthenticateAsync(context))
         {
             context.Response.StatusCode = 401;
             return;

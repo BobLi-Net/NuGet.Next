@@ -7,7 +7,7 @@ import { useActiveTabKey } from "@/hooks/useActiveTabKey";
 const Top = memo(() => {
     const navigate = useNavigate();
     const activeTabKey = useActiveTabKey();
-    
+
     return (
         <Header
             logo={<Logo extra={'NuGet Next'} onClick={() => {
@@ -17,7 +17,9 @@ const Top = memo(() => {
             nav={<>
                 <TabsNav
                     activeKey={activeTabKey}
-                    onChange={(key) => navigate("/" + key)}
+                    onChange={(key) => {
+                        navigate("/" + key);
+                    }}
                     items={[
                         {
                             key: 'packages',

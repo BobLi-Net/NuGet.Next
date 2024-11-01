@@ -13,6 +13,23 @@ public class NullContext : IContext
         set => throw new NotImplementedException();
     }
 
+    public DbSet<User> Users
+    {
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
+    }
+
+    public DbSet<UserKey> UserKeys
+    {
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
+    }
+
+    public DbSet<PackageDependency> PackageDependencies { get; set; }
+    public DbSet<TargetFramework> TargetFrameworks { get; set; }
+
+    public DbSet<PackageUpdateRecord> PackageUpdateRecords { get; set; }
+
     public bool SupportsLimitInSubqueries => throw new NotImplementedException();
 
     public bool IsUniqueConstraintViolationException(DbUpdateException exception)

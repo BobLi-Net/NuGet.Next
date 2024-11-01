@@ -1,11 +1,13 @@
-import {  Icon } from '@lobehub/ui';
+import { Icon } from '@lobehub/ui';
 import {
   Book,
   Feather,
   LifeBuoy,
   LogOut,
   Mail,
-  Settings2,
+  ChartCandlestick,
+  AppWindow,
+  KeySquare
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { MenuProps } from '@/components/Menu';
@@ -16,9 +18,11 @@ import { authSelectors } from '@/store/user/selectors';
 
 export const useMenu = () => {
   const router = useQueryRoute();
-  const [isLogin, isLoginWithAuth] = useUserStore((s) => [
+  const [isLogin, isLoginWithAuth, logout, user] = useUserStore((s) => [
     authSelectors.isLogin(s),
-    authSelectors.isLoginWithAuth(s)
+    authSelectors.isLoginWithAuth(s),
+    s.logout,
+    s.user,
   ]);
 
   const helps: MenuProps['items'] = [
@@ -29,7 +33,7 @@ export const useMenu = () => {
           key: 'docs',
           label: (
             <Link to={DOCUMENTS} target={'_blank'}>
-                文档
+              文档
             </Link>
           ),
         },
@@ -38,7 +42,7 @@ export const useMenu = () => {
           key: 'feedback',
           label: (
             <Link to={GITHUB_ISSUES} target={'_blank'}>
-                反馈
+              反馈
             </Link>
           ),
         },
@@ -47,7 +51,7 @@ export const useMenu = () => {
           key: 'email',
           label: (
             <Link to={mailTo(EMAIL_SUPPORT)} target={'_blank'}>
-                邮件支持
+              邮件支持
             </Link>
           ),
         },
@@ -63,31 +67,60 @@ export const useMenu = () => {
 
   const settings: MenuProps['items'] = [
     {
-      icon: <Icon icon={Settings2} />,
-      key: 'settings',
-      label: '设置',
-      onClick: () =>{
-
+      icon: <Icon icon={ChartCandlestick} />,
+      key: 'common-history',
+      label: '提交记录',
+      onClick: () => {
+        router.push('/common-history');
       },
     },
+    {
+      type: 'divider',
+    },
+    {
+      icon: <Icon icon={KeySquare} />,
+      key: 'key-manager',
+      label: '密钥管理',
+      onClick: () => {
+        router.push('/key-manager');
+      },
+    }
   ]
+
+  const adminItems: MenuProps['items'] = [
+    ... (user?.role === 'admin' ? [
+      {
+        icon: <Icon icon={AppWindow} />,
+        key: 'admin',
+        label: '管理',
+        onClick: () => {
+          router.push('/admin');
+        },
+      },
+    ] : [])
+  ];
+
 
   const mainItems = [
     {
       type: 'divider',
     },
+    ...adminItems,
     ...(isLogin ? settings : []),
     ...helps,
   ].filter(Boolean) as MenuProps['items'];
 
   const logoutItems: MenuProps['items'] = isLoginWithAuth
     ? [
-        {
-          icon: <Icon icon={LogOut} />,
-          key: 'logout',
-          label: <span>退出登录</span>,
-        },
-      ]
+      {
+        icon: <Icon icon={LogOut} />,
+        key: 'logout',
+        label: <span>退出登录</span>,
+        onClick: () => {
+          logout();
+        }
+      },
+    ]
     : [];
 
   return { logoutItems, mainItems };
