@@ -1,6 +1,7 @@
 ﻿using Gnarly.Data;
 using NuGet.Frameworks;
 using NuGet.Next.Core;
+using NuGet.Next.Core.Exceptions;
 using NuGet.Next.Protocol.Models;
 using NuGet.Versioning;
 
@@ -18,9 +19,7 @@ public class PackageMetadataApis(
         var index = await metadata.GetRegistrationIndexOrNullAsync(id, context.RequestAborted);
         if (index == null)
         {
-            context.Response.StatusCode = 404;
-
-            return null;
+            throw new NotFoundException("包不存在");
         }
 
         return index;
@@ -30,15 +29,13 @@ public class PackageMetadataApis(
     {
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return null;
+            throw new NotFoundException("包不存在");
         }
 
         var leaf = await metadata.GetRegistrationLeafOrNullAsync(id, nugetVersion, context.RequestAborted);
         if (leaf == null)
         {
-            context.Response.StatusCode = 404;
-            return null;
+            throw new NotFoundException("包不存在");
         }
 
         return leaf;

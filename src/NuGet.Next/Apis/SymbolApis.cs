@@ -1,5 +1,6 @@
 ﻿using Gnarly.Data;
 using NuGet.Next.Core;
+using NuGet.Next.Core.Exceptions;
 using NuGet.Next.Extensions;
 using NuGet.Next.Options;
 
@@ -17,8 +18,7 @@ public class SymbolApis(
         {
             if (options.IsReadOnlyMode || !await authentication.AuthenticateAsync(context))
             {
-                context.Response.StatusCode = 401;
-                return;
+                throw new UnauthorizedAccessException();
             }
 
             try
@@ -40,8 +40,7 @@ public class SymbolApis(
                             break;
 
                         case SymbolIndexingResult.PackageNotFound:
-                            context.Response.StatusCode = 404;
-                            break;
+                            throw new NotFoundException("包不存在");
 
                         case SymbolIndexingResult.Success:
                             context.Response.StatusCode = 201;
@@ -62,8 +61,7 @@ public class SymbolApis(
             var pdbStream = await storage.GetPortablePdbContentStreamOrNullAsync(file, key);
             if (pdbStream == null)
             {
-                context.Response.StatusCode = 404;
-                return;
+                throw new NotFoundException("包不存在");
             }
 
             context.Response.ContentType = "application/octet-stream";

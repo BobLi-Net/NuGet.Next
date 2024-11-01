@@ -33,16 +33,14 @@ public class PackageApis(
     {
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         var packageStream =
             await packageContent.GetPackageContentStreamOrNullAsync(id, nugetVersion, context.RequestAborted);
         if (packageStream == null)
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         context.Response.ContentType = "application/octet-stream";
@@ -54,16 +52,14 @@ public class PackageApis(
     {
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         var nuspecStream =
             await packageContent.GetPackageManifestStreamOrNullAsync(id, nugetVersion, context.RequestAborted);
         if (nuspecStream == null)
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         context.Response.ContentType = "text/xml";
@@ -75,16 +71,14 @@ public class PackageApis(
     {
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         var readmeStream =
             await packageContent.GetPackageReadmeStreamOrNullAsync(id, nugetVersion, context.RequestAborted);
         if (readmeStream == null)
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         context.Response.ContentType = "text/markdown";
@@ -95,15 +89,13 @@ public class PackageApis(
     {
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         var iconStream = await packageContent.GetPackageIconStreamOrNullAsync(id, nugetVersion, context.RequestAborted);
         if (iconStream == null)
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         context.Response.ContentType = "image/xyz";

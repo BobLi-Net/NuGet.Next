@@ -1,6 +1,7 @@
 ﻿using Gnarly.Data;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Next.Core;
+using NuGet.Next.Core.Exceptions;
 using NuGet.Next.Protocol.Models;
 
 namespace NuGet.Next.Service;
@@ -78,8 +79,7 @@ public class SearchApis(ISearchService searchService) : IScopeDependency
     {
         if (string.IsNullOrWhiteSpace(packageId))
         {
-            context.Response.StatusCode = 400;
-            return null;
+            throw new NotFoundException("包不存在");
         }
 
         return await searchService.FindDependentsAsync(packageId, context.RequestAborted);

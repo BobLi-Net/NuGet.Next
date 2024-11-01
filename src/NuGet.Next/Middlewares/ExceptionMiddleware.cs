@@ -1,4 +1,5 @@
 ﻿using Gnarly.Data;
+using NuGet.Next.Core.Exceptions;
 using NuGet.Next.Protocol.Models;
 
 namespace NuGet.Next.Middlewares;
@@ -23,6 +24,17 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
 
                 await next(context);
             }
+        }
+        catch (NotFoundException notFoundException)
+        {
+            context.Response.StatusCode = 404;
+            context.Response.ContentType = "application/json";
+
+            var response = new OkResponse(false, notFoundException.Message);
+
+            await context.Response.WriteAsJsonAsync(response);
+
+            logger.LogWarning("Resource not found: {Path}", context.Request.Path);
         }
         catch (UnauthorizedAccessException)
         {

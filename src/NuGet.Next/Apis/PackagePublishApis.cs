@@ -1,6 +1,7 @@
 ﻿using Gnarly.Data;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Next.Core;
+using NuGet.Next.Core.Exceptions;
 using NuGet.Next.Extensions;
 using NuGet.Next.Options;
 using NuGet.Versioning;
@@ -21,16 +22,14 @@ public class PackagePublishApis(
         if (options.IsReadOnlyMode ||
             !await authentication.AuthenticateAsync(context))
         {
-            context.Response.StatusCode = 401;
-            return;
+            throw new UnauthorizedAccessException();
         }
 
         using (var uploadStream = await context.GetUploadStreamOrNullAsync(context.RequestAborted))
         {
             if (uploadStream == null)
             {
-                context.Response.StatusCode = 400;
-                return;
+                throw new NotFoundException("包不存在");
             }
 
             var result = await indexer.IndexAsync(uploadStream, context.RequestAborted);
@@ -56,20 +55,17 @@ public class PackagePublishApis(
     {
         if (options.IsReadOnlyMode)
         {
-            context.Response.StatusCode = 401;
-            return;
+            throw new UnauthorizedAccessException();
         }
 
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         if (!await authentication.AuthenticateAsync(context))
         {
-            context.Response.StatusCode = 401;
-            return;
+            throw new UnauthorizedAccessException();
         }
 
         if (await deleteService.TryDeletePackageAsync(id, nugetVersion, context.RequestAborted))
@@ -87,20 +83,17 @@ public class PackagePublishApis(
     {
         if (options.IsReadOnlyMode)
         {
-            context.Response.StatusCode = 401;
-            return;
+            throw new UnauthorizedAccessException();
         }
 
         if (!NuGetVersion.TryParse(version, out var nugetVersion))
         {
-            context.Response.StatusCode = 404;
-            return;
+            throw new NotFoundException("包不存在");
         }
 
         if (!await authentication.AuthenticateAsync(context))
         {
-            context.Response.StatusCode = 401;
-            return;
+            throw new UnauthorizedAccessException();
         }
 
         if (await packages.RelistPackageAsync(id, nugetVersion, context.RequestAborted))
@@ -109,7 +102,7 @@ public class PackagePublishApis(
         }
         else
         {
-            context.Response.StatusCode = 404;
+            throw new NotFoundException("包不存在");
         }
     }
 }
