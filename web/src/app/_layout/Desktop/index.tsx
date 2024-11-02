@@ -32,7 +32,7 @@ const DesktopLayout = memo(() => {
                                     url: 'https://ai-dotnet.com',
                                 },
                                 {
-                                    title: '沙漠尽头的狼',
+                                    title: '码界工坊',
                                     url: 'https://dotnet9.com/',
                                 }
                             ]
