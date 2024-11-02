@@ -107,7 +107,8 @@ public class PackageApis(
     {
         if (userContext.Role != RoleConstant.Admin)
         {
-            throw new ForbiddenException("无权限");
+            // 只有管理员才能查看所有包，其他用户只能查看自己的包
+            userIds = [userContext.UserId];
         }
 
         page = Math.Max(page, 1);
@@ -139,9 +140,10 @@ public class PackageApis(
     /// <returns></returns>
     public async Task<OkResponse> DeleteAsync(string id, string version)
     {
+        // 只有管理员才能删除包
         if (userContext.Role != RoleConstant.Admin)
         {
-            throw new ForbiddenException("无权限");
+            throw new ForbiddenException("无权删除");
         }
 
         await packageDatabase.HardDeletePackageAsync(id, NuGetVersion.Parse(version), false, new CancellationToken());

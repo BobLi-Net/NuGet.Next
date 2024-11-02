@@ -1,16 +1,56 @@
-import { Header, Logo, TabsNav } from "@lobehub/ui";
-import { memo } from "react";
+import { Header, Logo, TabsNav, ThemeSwitch } from "@lobehub/ui";
+import { memo, useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { useNavigate } from "react-router-dom";
 import { useActiveTabKey } from "@/hooks/useActiveTabKey";
+import { useUserStore } from "@/store/user";
+import { Flexbox } from 'react-layout-kit';
 
 const Top = memo(() => {
     const navigate = useNavigate();
     const activeTabKey = useActiveTabKey();
+    const [isSignedIn, theme, setTheme] = useUserStore((s) => [s.isSignedIn, s.theme, s.setTheme]);
+
+    const [tabs, setTabs] = useState([
+        {
+            key: 'packages',
+            order: 1,
+            label: '包',
+        },
+        {
+            key: 'docs',
+            order: 5,
+            label: '文档',
+        }]);
+
+    useEffect(() => {
+        if (isSignedIn && tabs.length === 2) {
+            const items = [
+                {
+                    key: 'upload',
+                    label: '上传',
+                    order: 2,
+                },
+                {
+                    key: 'key-manager',
+                    label: '密钥管理',
+                    order: 3,
+                },
+                {
+                    key: 'current-package',
+                    label: '包管理',
+                    order: 4,
+                }]
+
+            setTabs((prev) => [...prev, ...items]);
+        }
+    }, [isSignedIn]);
 
     return (
         <Header
-            logo={<Logo extra={'NuGet Next'} onClick={() => {
+            logo={<Logo style={{
+                cursor: 'pointer',
+            }} extra={'NuGet Next'} onClick={() => {
                 navigate('/');
             }} />}
             title="NuGet Next"
@@ -20,27 +60,16 @@ const Top = memo(() => {
                     onChange={(key) => {
                         navigate("/" + key);
                     }}
-                    items={[
-                        {
-                            key: 'packages',
-                            label: '包',
-                        },
-                        {
-                            key: 'upload',
-                            label: '上传',
-                        },
-                        {
-                            key: 'key-manager',
-                            label: '密钥管理',
-                        },
-                        {
-                            key: 'docs',
-                            label: '文档',
-                        }
-                    ]} />
+                    items={tabs.sort((a, b) => a.order - b.order)}
+                />
             </>}
             actions={<>
-                <Avatar />
+                <Flexbox horizontal>
+                    <ThemeSwitch style={{
+                        marginRight: 16,
+                    }} onThemeSwitch={setTheme} themeMode={theme} />
+                    <Avatar />
+                </Flexbox>
             </>}
         >
 

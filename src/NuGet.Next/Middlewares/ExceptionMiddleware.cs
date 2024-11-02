@@ -17,7 +17,6 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
 
             await next(context);
 
-
             if (context.Response.StatusCode == 404)
             {
                 context.Request.Path = "/index.html";
@@ -49,14 +48,39 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
         }
         catch (Exception ex)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
+            if (ex is InvalidOperationException or BadRequestException)
+            {
+                context.Response.StatusCode = 200;
+                context.Response.ContentType = "application/json";
 
-            var response = new OkResponse(false, "服务器内部错误");
+                var response = new OkResponse(false, ex.Message);
 
-            await context.Response.WriteAsJsonAsync(response);
+                await context.Response.WriteAsJsonAsync(response);
 
-            logger.LogError(ex, "An error occurred while processing {Path}", context.Request.Path);
+                logger.LogWarning("Invalid operation: {Message}", ex.Message);
+            }
+            else if (ex is ForbiddenException)
+            {
+                context.Response.StatusCode = 403;
+                context.Response.ContentType = "application/json";
+
+                var response = new OkResponse(false, ex.Message);
+
+                await context.Response.WriteAsJsonAsync(response);
+
+                logger.LogWarning("Forbidden access to {Path}", context.Request.Path);
+            }
+            else
+            {
+                context.Response.StatusCode = 500;
+                context.Response.ContentType = "application/json";
+
+                var response = new OkResponse(false, "服务器内部错误");
+
+                await context.Response.WriteAsJsonAsync(response);
+
+                logger.LogError(ex, "An error occurred while processing {Path}", context.Request.Path);
+            }
         }
     }
 }

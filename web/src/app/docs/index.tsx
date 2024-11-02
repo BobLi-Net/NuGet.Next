@@ -1,4 +1,5 @@
 import Menu from "@/components/Menu";
+import { useUserStore } from "@/store/user";
 import { Markdown } from "@lobehub/ui";
 import { memo, useEffect, useState } from "react";
 
@@ -7,12 +8,27 @@ import { Flexbox } from 'react-layout-kit';
 
 const DocsPage = memo(() => {
     const [menu, setMenu] = useState('quick-start');
+    const theme = useUserStore((s) => s.theme);
+    const [currentTheme, setCurrentTheme] = useState(theme);
     const [content, setContent] = useState('');
     useEffect(() => {
         fetch(`/docs/${menu}.md`).then(v => v.text()).then(v => {
             setContent(v);
         });
     }, [menu]);
+
+    useEffect(() => {
+        if (theme === 'auto') {
+            // 判断当前系统主题是否dark
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setCurrentTheme('dark');
+            } else {
+                setCurrentTheme('light');
+            }
+        } else {
+            setCurrentTheme(theme);
+        }
+    }, [theme]);
 
     return <>
         <Flexbox horizontal>
@@ -21,8 +37,9 @@ const DocsPage = memo(() => {
                 minWidth: 300,
                 maxWidth: 300,
                 height: '100vh',
-                backgroundColor: '#f0f0f0',
-                borderRight: '1px solid #e0e0e0',
+                paddingTop: 10,
+                backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : '#fff',
+                borderRight: currentTheme === 'dark' ? '1px solid #333' : '1px solid #ddd',
             }}>
                 <Menu
                     key={menu}

@@ -7,6 +7,7 @@ import { merge } from '@/utils/merge';
 export interface PreferenceAction {
   updateGuideState: (guide: Partial<UserGuide>) => Promise<void>;
   updatePreference: (preference: Partial<UserPreference>, action?: any) => Promise<void>;
+  setTheme: (theme: 'light' | 'dark' | 'auto') => void;
 }
 
 export const createPreferenceSlice: StateCreator<
@@ -28,4 +29,8 @@ export const createPreferenceSlice: StateCreator<
 
     // await userService.updatePreference(nextPreference);
   },
+  setTheme: (theme) => {
+    set({ theme });
+    localStorage.setItem('theme', theme);
+  }
 });

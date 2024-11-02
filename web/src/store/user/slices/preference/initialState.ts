@@ -6,8 +6,10 @@ export interface UserPreferenceState {
    * the user preference, which only store in local storage
    */
   preference: UserPreference;
+  theme: "light" | "dark" | "auto";
 }
 
 export const initialPreferenceState: UserPreferenceState = {
   preference: DEFAULT_PREFERENCE,
+  theme: localStorage.getItem('theme') as "light" | "dark" | "auto" || "auto",
 };

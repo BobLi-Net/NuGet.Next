@@ -16,6 +16,7 @@ const Welcome = () => {
                 width: 500,
             }}>
                 <Input
+                    size="large"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     suffix={<Button onClick={() => {

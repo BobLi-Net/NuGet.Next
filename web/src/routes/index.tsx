@@ -16,7 +16,7 @@ import KeyManager from "@/app/key-manager";
 import DocsPage from "@/app/docs";
 import AboutPage from "@/app/about";
 import PrivacyPage from "@/app/privacy";
-
+import CurrentPackage from "@/app/current-package";
 
 const routes = [
     {
@@ -61,6 +61,10 @@ const routes = [
             {
                 element: <PrivacyPage />,
                 path: "/privacy",
+            },
+            {
+                element: <CurrentPackage />,
+                path: "/current-package",
             }
         ],
     },

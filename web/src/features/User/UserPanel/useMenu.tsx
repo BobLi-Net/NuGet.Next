@@ -7,7 +7,8 @@ import {
   Mail,
   ChartCandlestick,
   AppWindow,
-  KeySquare
+  KeySquare,
+  Download
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { MenuProps } from '@/components/Menu';
@@ -24,6 +25,23 @@ export const useMenu = () => {
     s.logout,
     s.user,
   ]);
+
+  function downloadNugetConfig() {
+    fetch('/config/default.config')
+      .then((res) => res.text())
+      .then((text) => {
+        text = text.replace('{source}', window.location.origin);
+        const blob = new Blob([text], {
+          type: 'text/plain',
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'NuGet.config';
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+  }
 
   const helps: MenuProps['items'] = [
     {
@@ -97,7 +115,17 @@ export const useMenu = () => {
           router.push('/admin');
         },
       },
-    ] : [])
+    ] : [
+      {
+        icon: <Icon icon={AppWindow} />,
+        key: 'current-package',
+        label: '包管理',
+        onClick: () => {
+          router.push('/current-package', {
+            replace: true,
+          });
+        },
+      }])
   ];
 
 
@@ -105,7 +133,15 @@ export const useMenu = () => {
     {
       type: 'divider',
     },
-    ...adminItems,
+    {
+      icon: <Icon icon={Download} />,
+      key: 'download-nuget-config',
+      label: <span>下载 NuGet.config</span>,
+      onClick: () => {
+        downloadNugetConfig();
+      }
+    },
+    ...(isLogin ? adminItems : []),
     ...(isLogin ? settings : []),
     ...helps,
   ].filter(Boolean) as MenuProps['items'];
@@ -121,7 +157,8 @@ export const useMenu = () => {
         }
       },
     ]
-    : [];
+    : [
+    ];
 
   return { logoutItems, mainItems };
 };

@@ -5,10 +5,9 @@ import Divider from '@lobehub/ui/es/Form/components/FormDivider';
 import { useEffect, useState } from 'react';
 import { Tag, Tooltip } from '@lobehub/ui';
 import { DeletePackage, PackageList } from '@/services/PackageService';
-import UserSelect from '@/features/User/UserSelect';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
-const PackageManagementPage = () => {
+const CurrentPackage = () => {
 
     const columns = [
         {
@@ -61,7 +60,7 @@ const PackageManagementPage = () => {
             dataIndex: 'authors',
             key: 'authors',
             render: (authors: string[]) => {
-                return authors?.map((author) => {
+                return authors.map((author) => {
                     return (
                         <Tag key={author}>
                             {author}
@@ -79,7 +78,7 @@ const PackageManagementPage = () => {
             dataIndex: 'tags',
             key: 'tags',
             render: (tags: string[]) => {
-                return tags?.map((tag) => {
+                return tags.map((tag) => {
                     return (
                         <Tag key={tag}>
                             {tag}
@@ -131,7 +130,6 @@ const PackageManagementPage = () => {
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [userIds, setUserIds] = useState<string[]>([]);
     const [keyword,] = useState('');
 
     async function removeUser(id: string, version: string) {
@@ -147,7 +145,7 @@ const PackageManagementPage = () => {
     async function loadData() {
         setLoading(true);
         try {
-            const result = await PackageList(page, pageSize, userIds, keyword);
+            const result = await PackageList(page, pageSize, [], keyword);
             setData(result.items);
             setTotal(result.total);
         } finally {
@@ -174,13 +172,6 @@ const PackageManagementPage = () => {
                     marginLeft: 'auto',
                     marginRight: 16,
                 }}>
-                    <UserSelect
-                        virtual={true}
-                        mode="multiple"
-                        placeholder="选择用户"
-                        width='150px'
-                        model="tags"
-                        value={userIds} onChange={(v) => setUserIds(v)} />
                     <Button
                         onClick={() => {
                             loadData();
@@ -206,4 +197,4 @@ const PackageManagementPage = () => {
     )
 }
 
-export default PackageManagementPage
+export default CurrentPackage
