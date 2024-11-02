@@ -297,9 +297,14 @@ const PackageDetails = () => {
                         )}
                         <li>
                             <CloudDownloadOutlined /> <a onClick={() => {
-                                // 使用a标签的download属性实现下载
+
+                                const url = detail.packageDownloadUrl ?? location.origin + '/v3/package/' +
+                                    detail.package.id + '/' +
+                                    detail.package.normalizedVersionString + '/' +
+                                    `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`;
+
                                 const a = document.createElement('a');
-                                a.href = detail.packageDownloadUrl ?? '';
+                                a.href = url;
                                 a.download = `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`;
                                 a.click();
 
