@@ -8,7 +8,7 @@ using NuGet.Next.PostgreSql;
 
 #nullable disable
 
-namespace NuGet.Next.PostgreSql.Migrations
+namespace BaGet.Database.PostgreSql.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
     partial class PostgreSqlContextModelSnapshot : ModelSnapshot
@@ -37,7 +37,7 @@ namespace NuGet.Next.PostgreSql.Migrations
                         .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Creator")
                         .HasColumnType("text");
@@ -101,7 +101,7 @@ namespace NuGet.Next.PostgreSql.Migrations
                         .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime>("Published")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ReleaseNotes")
                         .HasColumnType("text")
@@ -139,7 +139,7 @@ namespace NuGet.Next.PostgreSql.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Key");
 
@@ -232,7 +232,7 @@ namespace NuGet.Next.PostgreSql.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("OperationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("OperationType")
                         .IsRequired()
@@ -327,12 +327,12 @@ namespace NuGet.Next.PostgreSql.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0748b328-aa89-468a-ade2-26563302e0cc",
+                            Id = "c1b0007d-5754-4d0b-ae24-e6e0c97c9ed9",
                             Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
                             Email = "239573049@qq.com",
                             FullName = "token",
-                            Password = "eb36b24cf16145d9bfd985b65a302a85",
-                            PasswordHash = "711923e65e054d74911342b81332d0d1",
+                            Password = "06e8fa784bc3b75087e223900d1be9ac",
+                            PasswordHash = "bdd18f8f7a964a99a0bee29bec16a040",
                             Role = "admin",
                             Username = "admin"
                         });
@@ -370,11 +370,11 @@ namespace NuGet.Next.PostgreSql.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dacd058775484cd092837b051f9e6098",
-                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 2, 11, 30, 973, DateTimeKind.Unspecified).AddTicks(7069), new TimeSpan(0, 8, 0, 0, 0)),
+                            Id = "d7ff7a0080ec40cf88708be89a7b2ee1",
+                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 22, 45, 32, 566, DateTimeKind.Unspecified).AddTicks(1016), new TimeSpan(0, 8, 0, 0, 0)),
                             Enabled = true,
-                            Key = "key-e2b6441254bf423a99c2299f4592d9a3",
-                            UserId = "0748b328-aa89-468a-ade2-26563302e0cc"
+                            Key = "key-c86d98a6ea42484ead484552fba0be00",
+                            UserId = "c1b0007d-5754-4d0b-ae24-e6e0c97c9ed9"
                         });
                 });
 

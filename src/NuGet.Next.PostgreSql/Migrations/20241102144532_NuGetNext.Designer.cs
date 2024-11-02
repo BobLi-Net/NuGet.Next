@@ -4,137 +4,145 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NuGet.Next.Sqlite;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NuGet.Next.PostgreSql;
 
 #nullable disable
 
-namespace NuGet.Next.Sqlite.Migrations
+namespace NuGet.Next.PostgreSql.Migrations
 {
-    [DbContext(typeof(SqliteContext))]
-    [Migration("20241101181215_Initial")]
-    partial class Initial
+    [DbContext(typeof(PostgreSqlContext))]
+    [Migration("20241102144532_NuGetNext")]
+    partial class NuGetNext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("NuGet.Next.Core.Package", b =>
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Authors")
                         .IsRequired()
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Creator")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<long>("Downloads")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("HasEmbeddedIcon")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("HasReadme")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("IconUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<string>("Id")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("citext");
 
                     b.Property<bool>("IsPrerelease")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Language")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("LicenseUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<bool>("Listed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("MinClientVersion")
                         .HasMaxLength(44)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(44)");
 
                     b.Property<string>("Modifier")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedVersionString")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT COLLATE NOCASE")
+                        .HasColumnType("citext")
                         .HasColumnName("Version");
 
                     b.Property<string>("OriginalVersionString")
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("character varying(64)")
                         .HasColumnName("OriginalVersion");
 
                     b.Property<string>("ProjectUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime>("Published")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ReleaseNotes")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("text")
                         .HasColumnName("ReleaseNotes");
 
                     b.Property<string>("RepositoryType")
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("RepositoryUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<bool>("RequireLicenseAcceptance")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
+                        .HasColumnType("bytea");
 
                     b.Property<int>("SemVerLevel")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Summary")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<string>("Tags")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Key");
 
@@ -150,26 +158,28 @@ namespace NuGet.Next.Sqlite.Migrations
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Id")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("citext");
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("PackageKey")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TargetFramework")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("VersionRange")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Key");
 
@@ -184,18 +194,20 @@ namespace NuGet.Next.Sqlite.Migrations
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Name")
                         .HasMaxLength(512)
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("citext");
 
                     b.Property<int>("PackageKey")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Version")
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(64)");
 
                     b.HasKey("Key");
 
@@ -210,34 +222,36 @@ namespace NuGet.Next.Sqlite.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("OperationDescription")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("OperationIP")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("OperationTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("OperationType")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -252,18 +266,20 @@ namespace NuGet.Next.Sqlite.Migrations
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Moniker")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("citext");
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("PackageKey")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.HasKey("Key");
 
@@ -277,32 +293,32 @@ namespace NuGet.Next.Sqlite.Migrations
             modelBuilder.Entity("NuGet.Next.Core.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -314,12 +330,12 @@ namespace NuGet.Next.Sqlite.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b37b542c-2dac-4d79-85c0-5ff7419a17d5",
+                            Id = "c1b0007d-5754-4d0b-ae24-e6e0c97c9ed9",
                             Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
                             Email = "239573049@qq.com",
                             FullName = "token",
-                            Password = "16f0836f1e404d2cc9a88934a06c457a",
-                            PasswordHash = "c556c15f9dcd4dc093176f8e30c207e6",
+                            Password = "06e8fa784bc3b75087e223900d1be9ac",
+                            PasswordHash = "bdd18f8f7a964a99a0bee29bec16a040",
                             Role = "admin",
                             Username = "admin"
                         });
@@ -329,21 +345,21 @@ namespace NuGet.Next.Sqlite.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -357,11 +373,11 @@ namespace NuGet.Next.Sqlite.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3a432a83f5ad4ed2aeb111f191c74e52",
-                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 2, 12, 14, 950, DateTimeKind.Unspecified).AddTicks(2718), new TimeSpan(0, 8, 0, 0, 0)),
+                            Id = "d7ff7a0080ec40cf88708be89a7b2ee1",
+                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 22, 45, 32, 566, DateTimeKind.Unspecified).AddTicks(1016), new TimeSpan(0, 8, 0, 0, 0)),
                             Enabled = true,
-                            Key = "key-d25c8efb94074541873447b65f7bc7c2",
-                            UserId = "b37b542c-2dac-4d79-85c0-5ff7419a17d5"
+                            Key = "key-c86d98a6ea42484ead484552fba0be00",
+                            UserId = "c1b0007d-5754-4d0b-ae24-e6e0c97c9ed9"
                         });
                 });
 

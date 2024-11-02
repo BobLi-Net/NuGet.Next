@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using NuGet.Next.PostgreSql;
+using NuGet.Next.SqlServer;
 
 #nullable disable
 
-namespace NuGet.Next.PostgreSql.Migrations
+namespace NuGet.Next.SqlServer.Migrations
 {
-    [DbContext(typeof(PostgreSqlContext))]
-    [Migration("20241101181131_Initial")]
-    partial class Initial
+    [DbContext(typeof(SqlServerContext))]
+    [Migration("20241102144604_NuGetNext")]
+    partial class NuGetNext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,128 +21,127 @@ namespace NuGet.Next.PostgreSql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("NuGet.Next.Core.Package", b =>
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Authors")
                         .IsRequired()
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Creator")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<long>("Downloads")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("HasEmbeddedIcon")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("HasReadme")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("IconUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("Id")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("citext");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<bool>("IsPrerelease")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Language")
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("LicenseUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<bool>("Listed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("MinClientVersion")
                         .HasMaxLength(44)
-                        .HasColumnType("character varying(44)");
+                        .HasColumnType("nvarchar(44)");
 
                     b.Property<string>("Modifier")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedVersionString")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("citext")
+                        .HasColumnType("nvarchar(64)")
                         .HasColumnName("Version");
 
                     b.Property<string>("OriginalVersionString")
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
+                        .HasColumnType("nvarchar(64)")
                         .HasColumnName("OriginalVersion");
 
                     b.Property<string>("ProjectUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<DateTime>("Published")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReleaseNotes")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ReleaseNotes");
 
                     b.Property<string>("RepositoryType")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("RepositoryUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<bool>("RequireLicenseAcceptance")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                        .HasColumnType("rowversion");
 
                     b.Property<int>("SemVerLevel")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Summary")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("Tags")
                         .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Key");
 
@@ -158,28 +157,28 @@ namespace NuGet.Next.PostgreSql.Migrations
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Id")
                         .HasMaxLength(128)
-                        .HasColumnType("citext");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PackageKey")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("TargetFramework")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("VersionRange")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Key");
 
@@ -194,20 +193,20 @@ namespace NuGet.Next.PostgreSql.Migrations
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Name")
                         .HasMaxLength(512)
-                        .HasColumnType("citext");
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<int>("PackageKey")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Version")
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Key");
 
@@ -224,34 +223,34 @@ namespace NuGet.Next.PostgreSql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("OperationDescription")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OperationIP")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OperationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("OperationType")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -266,20 +265,20 @@ namespace NuGet.Next.PostgreSql.Migrations
                 {
                     b.Property<int>("Key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Key"));
 
                     b.Property<string>("Moniker")
                         .HasMaxLength(256)
-                        .HasColumnType("citext");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PackageKey")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Key");
 
@@ -293,32 +292,32 @@ namespace NuGet.Next.PostgreSql.Migrations
             modelBuilder.Entity("NuGet.Next.Core.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -330,12 +329,12 @@ namespace NuGet.Next.PostgreSql.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0748b328-aa89-468a-ade2-26563302e0cc",
+                            Id = "1c83c5c5-1b06-43a1-97a8-b1fd131a8ee6",
                             Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
                             Email = "239573049@qq.com",
                             FullName = "token",
-                            Password = "eb36b24cf16145d9bfd985b65a302a85",
-                            PasswordHash = "711923e65e054d74911342b81332d0d1",
+                            Password = "0a5e25b72026206b454ee76db49847e1",
+                            PasswordHash = "1cf44bc30d9e45999250415301693235",
                             Role = "admin",
                             Username = "admin"
                         });
@@ -345,21 +344,21 @@ namespace NuGet.Next.PostgreSql.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTimeOffset>("CreatedTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -373,11 +372,11 @@ namespace NuGet.Next.PostgreSql.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dacd058775484cd092837b051f9e6098",
-                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 2, 11, 30, 973, DateTimeKind.Unspecified).AddTicks(7069), new TimeSpan(0, 8, 0, 0, 0)),
+                            Id = "4886cfd3e4b74a96a29b214366602252",
+                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 22, 46, 4, 485, DateTimeKind.Unspecified).AddTicks(6718), new TimeSpan(0, 8, 0, 0, 0)),
                             Enabled = true,
-                            Key = "key-e2b6441254bf423a99c2299f4592d9a3",
-                            UserId = "0748b328-aa89-468a-ade2-26563302e0cc"
+                            Key = "key-520d78f73e454beea64c336a00af919a",
+                            UserId = "1c83c5c5-1b06-43a1-97a8-b1fd131a8ee6"
                         });
                 });
 

@@ -8,7 +8,7 @@ using NuGet.Next.MySql;
 
 #nullable disable
 
-namespace NuGet.Next.MySql.Migrations
+namespace BaGet.Database.MySql.Migrations
 {
     [DbContext(typeof(MySqlContext))]
     partial class MySqlContextModelSnapshot : ModelSnapshot
@@ -326,12 +326,12 @@ namespace NuGet.Next.MySql.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fe256917-de1c-478e-9a32-272b6b542b15",
+                            Id = "4f1b9dd1-6506-4274-99a7-ac7ad8b2acd3",
                             Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
                             Email = "239573049@qq.com",
                             FullName = "token",
-                            Password = "8ddc6e6ddb0d97699423852471011a56",
-                            PasswordHash = "48e41f7cd9564ebd917ef793ef416a61",
+                            Password = "63c81ad22446eeb448bee5d268813a9c",
+                            PasswordHash = "1dfc5d718a0c4e0cbd6ccf25faf80ebb",
                             Role = "admin",
                             Username = "admin"
                         });
@@ -369,11 +369,11 @@ namespace NuGet.Next.MySql.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "69af12db543d4c18a531e293ec733078",
-                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 2, 23, 58, 956, DateTimeKind.Unspecified).AddTicks(980), new TimeSpan(0, 8, 0, 0, 0)),
+                            Id = "791f3e08b61d417599489dad865dced2",
+                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 22, 44, 56, 423, DateTimeKind.Unspecified).AddTicks(987), new TimeSpan(0, 8, 0, 0, 0)),
                             Enabled = true,
-                            Key = "key-84b76b22f70f46048664fbf2469243a0",
-                            UserId = "fe256917-de1c-478e-9a32-272b6b542b15"
+                            Key = "key-3002dbea87054fddb40ab74efc08b434",
+                            UserId = "4f1b9dd1-6506-4274-99a7-ac7ad8b2acd3"
                         });
                 });
 

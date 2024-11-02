@@ -8,7 +8,7 @@ using NuGet.Next.SqlServer;
 
 #nullable disable
 
-namespace NuGet.Next.SqlServer.Migrations
+namespace BaGet.Database.SqlServer.Migrations
 {
     [DbContext(typeof(SqlServerContext))]
     partial class SqlServerContextModelSnapshot : ModelSnapshot
@@ -326,12 +326,12 @@ namespace NuGet.Next.SqlServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "27cd7cf8-9c9b-4184-af90-27e1a59db10f",
+                            Id = "1c83c5c5-1b06-43a1-97a8-b1fd131a8ee6",
                             Avatar = "https://avatars.githubusercontent.com/u/61819790?v=4",
                             Email = "239573049@qq.com",
                             FullName = "token",
-                            Password = "441ea9fbc48b73af1d9a689bcd0f35d5",
-                            PasswordHash = "52faec426ad8462b8d65d3e571a3f72a",
+                            Password = "0a5e25b72026206b454ee76db49847e1",
+                            PasswordHash = "1cf44bc30d9e45999250415301693235",
                             Role = "admin",
                             Username = "admin"
                         });
@@ -369,11 +369,11 @@ namespace NuGet.Next.SqlServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f59ff07b909f43b7b41b6bd8a1b5f9e8",
-                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 2, 24, 45, 157, DateTimeKind.Unspecified).AddTicks(5730), new TimeSpan(0, 8, 0, 0, 0)),
+                            Id = "4886cfd3e4b74a96a29b214366602252",
+                            CreatedTime = new DateTimeOffset(new DateTime(2024, 11, 2, 22, 46, 4, 485, DateTimeKind.Unspecified).AddTicks(6718), new TimeSpan(0, 8, 0, 0, 0)),
                             Enabled = true,
-                            Key = "key-b0232f4e330a4eca9b7d694528422454",
-                            UserId = "27cd7cf8-9c9b-4184-af90-27e1a59db10f"
+                            Key = "key-520d78f73e454beea64c336a00af919a",
+                            UserId = "1c83c5c5-1b06-43a1-97a8-b1fd131a8ee6"
                         });
                 });
 
