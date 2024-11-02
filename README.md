@@ -14,6 +14,14 @@ NuGet 最新版开源私有化包管理，我们基于BaGet的基础之上增加
 - 支持DM（达梦）数据库
 - 支持迁移BaGet原有数据
 
+## 从BaGet现有数据迁移
+
+### 迁移BaGet数据到NuGet Next
+
+ 请注意，NuGet Next是基于BaGet的基础之上增加了更多的功能，
+ 所以我们只需要启动`RunMigrationsAtStartu:true`迁移，
+ 然后数据库连接字符串指向BaGet的数据库即可。
+
 
 ## 快速部署
 
