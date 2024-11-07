@@ -1,10 +1,23 @@
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 using NuGet.Next.Converters;
 using NuGet.Next.Extensions;
 using NuGet.Next.Middlewares;
 using NuGet.Next.Service;
 
-var builder = WebApplication.CreateBuilder(args);
+Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
+
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions()
+{
+    Args = args,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+});
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+    builder.Services.AddWindowsService(options => { options.ServiceName = "NuGetNext"; });
+}
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

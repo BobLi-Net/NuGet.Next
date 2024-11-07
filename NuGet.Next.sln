@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		docker-compose.yml = docker-compose.yml
 		README.md = README.md
+		build.bat = build.bat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Next.Protocol", "src\NuGet.Next.Protocol\NuGet.Next.Protocol.csproj", "{4117C818-8287-489F-B873-9A9CFB450A2A}"
