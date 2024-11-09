@@ -46,7 +46,7 @@ namespace NuGet.Next.Core
         public async Task<IReadOnlyList<Package>> FindPackagesAsync(string id, CancellationToken cancellationToken)
         {
             var upstreamPackages = await _upstream.ListPackagesAsync(id, cancellationToken);
-            var localPackages = await _db.FindAsync(id, includeUnlisted: true, cancellationToken);
+            var  localPackages = await _db.FindAsync(id, includeUnlisted: true, cancellationToken);
 
             if (!upstreamPackages.Any()) return localPackages;
             if (!localPackages.Any()) return upstreamPackages;

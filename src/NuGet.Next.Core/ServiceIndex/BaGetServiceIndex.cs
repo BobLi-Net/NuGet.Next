@@ -13,7 +13,9 @@ public class BaGetServiceIndex : IServiceIndexService
     {
         var resources = new List<ServiceIndexItem>();
 
-        resources.AddRange(BuildResource("PackagePublish", _url.GetPackagePublishResourceUrl(), "2.0.0"));
+        var publishResourceUrl = _url.GetPackagePublishResourceUrl();
+        
+        resources.AddRange(BuildResource("PackagePublish", publishResourceUrl, "2.0.0"));
         resources.AddRange(BuildResource("SymbolPackagePublish", _url.GetSymbolPublishResourceUrl(), "4.9.0"));
         resources.AddRange(BuildResource("SearchQueryService", _url.GetSearchResourceUrl(), "", "3.0.0-beta",
             "3.0.0-rc"));
