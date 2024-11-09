@@ -31,7 +31,7 @@ NuGet 最新版开源私有化包管理，我们基于BaGet的基础之上增加
 version: '3.8'
 services:
   nuget.next:
-    image: registry.token-ai.cn/ai-dotnet/nuget-next
+    image: hejiale010426/nuget-next
     build:
       context: .
       dockerfile: src/NuGet.Next/Dockerfile
@@ -59,7 +59,7 @@ docker-compose up -d
 version: '3.8'
 services:
   nuget.next:
-    image: registry.token-ai.cn/ai-dotnet/nuget-next
+    image: hejiale010426/nuget-next
     build:
       context: .
       dockerfile: src/NuGet.Next/Dockerfile
@@ -87,7 +87,7 @@ docker-compose up -d
 version: '3.8'
 services:
   nuget.next:
-    image: registry.token-ai.cn/ai-dotnet/nuget-next
+    image: hejiale010426/nuget-next
     build:
       context: .
       dockerfile: src/NuGet.Next/Dockerfile
@@ -116,7 +116,7 @@ docker-compose up -d
 version: '3.8'
 services:
   nuget.next:
-    image: registry.token-ai.cn/ai-dotnet/nuget-next
+    image: hejiale010426/nuget-next
     build:
       context: .
       dockerfile: src/NuGet.Next/Dockerfile
@@ -144,7 +144,7 @@ docker-compose up -d
 version: '3.8'
 services:
   nuget.next:
-    image: registry.token-ai.cn/ai-dotnet/nuget-next
+    image: hejiale010426/nuget-next
     build:
       context: .
       dockerfile: src/NuGet.Next/Dockerfile

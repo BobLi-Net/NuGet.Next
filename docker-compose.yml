@@ -1,6 +1,6 @@
 ﻿services:
   nuget.next:
-    image: registry.token-ai.cn/ai-dotnet/nuget-next
+    image: hejiale010426/nuget-next
     build:
       context: .
       dockerfile: src/NuGet.Next/Dockerfile
