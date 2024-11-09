@@ -37,8 +37,8 @@ export const CommonHistory = () => {
             key: 'user',
             render: (user) => {
                 return (<>
-                    <Tooltip title={user.email}>
-                        <Avatar src={user.avatar} />
+                    <Tooltip title={user?.email}>
+                        <Avatar src={user?.avatar} />
                     </Tooltip>
                 </>)
             }
