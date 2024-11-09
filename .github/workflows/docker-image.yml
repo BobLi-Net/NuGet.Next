@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file src/NuGet.Next/Dockerfile --tag registry.token-ai.cn/ai-dotnet/nuget-next && docker push registry.token-ai.cn/ai-dotnet/nuget-next
+      run: docker login -u hejiale010426 -p ${{ secrets.DOCKER }} && docker build . --file src/NuGet.Next/Dockerfile --tag hejiale010426/nuget-next && docker push hejiale010426/nuget-next
