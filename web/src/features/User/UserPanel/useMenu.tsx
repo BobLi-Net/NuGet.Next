@@ -27,20 +27,24 @@ export const useMenu = () => {
   ]);
 
   function downloadNugetConfig() {
-    fetch('/config/default.config')
-      .then((res) => res.text())
-      .then((text) => {
-        text = text.replace('{source}', window.location.origin);
-        const blob = new Blob([text], {
-          type: 'text/plain',
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'NuGet.config';
-        a.click();
-        URL.revokeObjectURL(url);
-      })
+
+    const content = `<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="NuGet Next" value="{source}/v3/index.json" />
+  </packageSources>
+</configuration>
+`
+    const blob = new Blob([content.replace('{source}', window.location.origin)], {
+      type: 'text/plain',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'NuGet.config';
+    a.click();
+    URL.revokeObjectURL(url);
+
   }
 
   const helps: MenuProps['items'] = [
