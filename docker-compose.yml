@@ -14,4 +14,4 @@
       - Database:ConnectionString=Data Source=/app/data/nuget.db
       - Mirror:Enabled=true
       - Mirror:PackageSource=https://api.nuget.org/v3/index.json
-      - RunMigrationsAtStartup:true # 是否在启动时运行迁移，如果是第一次启动请设置为true
+      - RunMigrationsAtStartup=true # 是否在启动时运行迁移，如果是第一次启动请设置为true

@@ -101,7 +101,7 @@ services:
       - Database:ConnectionString=Host=postgres;Port=5432;Database=nuget-next;Username=token;Password=dd666666;
       - Mirror:Enabled=true # 是否启用镜像源
       - Mirror:PackageSource=https://api.nuget.org/v3/index.json # 镜像源，如果本地没有会自动从镜像源拉取
-      - RunMigrationsAtStartup:true # 是否在启动时运行迁移，如果是第一次启动请设置为true
+      - RunMigrationsAtStartup=true # 是否在启动时运行迁移，如果是第一次启动请设置为true
 
 ```
 
@@ -130,7 +130,7 @@ services:
       - Database:ConnectionString=Server=mysql;Port=3306;Database=nuget-next;Uid=root;Pwd=dd666666;
       - Mirror:Enabled=true # 是否启用镜像源
       - Mirror:PackageSource=https://api.nuget.org/v3/index.json # 镜像源，如果本地没有会自动从镜像源拉取
-      - RunMigrationsAtStartup:true # 是否在启动时运行迁移，如果是第一次启动请设置为true
+      - RunMigrationsAtStartup=true # 是否在启动时运行迁移，如果是第一次启动请设置为true
 
 ```
 
@@ -158,7 +158,7 @@ services:
       - Database:ConnectionString=Server=sqlserver;Database=nuget-next;User Id=sa;Password=dd666666;
       - Mirror:Enabled=true # 是否启用镜像源
       - Mirror:PackageSource=https://api.nuget.org/v3/index.json # 镜像源，如果本地没有会自动从镜像源拉取
-      - RunMigrationsAtStartup:true # 是否在启动时运行迁移，如果是第一次启动请设置为true
+      - RunMigrationsAtStartup=true # 是否在启动时运行迁移，如果是第一次启动请设置为true
 
 ```
 
