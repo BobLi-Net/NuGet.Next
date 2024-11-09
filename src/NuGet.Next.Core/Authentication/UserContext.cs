@@ -15,7 +15,7 @@ public class UserContext(IHttpContextAccessor httpContextAccessor, JwtHelper jwt
             // 获取header中的用户信息
             var key = httpContextAccessor.HttpContext?.Request.Headers[HttpContextExtensions.ApiKeyHeader].ToString();
 
-            if (key != null && !key.StartsWith("key-"))
+            if (!string.IsNullOrEmpty(key) && !key.StartsWith("key-"))
             {
                 return new ClaimsPrincipal(new[] { new ClaimsIdentity(jwtHelper.GetClaimsFromToken(key)) });
             }
