@@ -1,4 +1,40 @@
-# NuGet Next
+<div align="center"><a name="readme-top"></a>
+
+<img height="160" src="https://avatars.githubusercontent.com/u/163431636?s=400&u=8221ed1987d773400b0e232258e55470cd952536&v=4">
+
+<h1>NuGet Next</h1>
+
+NuGet 全新版本，提供更多权限管理。
+
+[![][github-release-shield]][github-release-link]
+[![][github-releasedate-shield]][github-releasedate-link]<br/>
+[![][github-contributors-shield]][github-contributors-link]
+[![][github-forks-shield]][github-forks-link]
+[![][github-stars-shield]][github-stars-link]
+[![][github-issues-shield]][github-issues-link]
+[![][github-license-shield]][github-license-link]
+
+[Changelog](./CHANGELOG.md) · [Report Bug][github-issues-link] · [Request Feature][github-issues-link]
+
+![](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+</div>
+
+[github-release-shield]: https://img.shields.io/github/v/release/AIDotNet/NuGet.Next?color=369eff&labelColor=black&logo=github&style=flat
+[github-release-link]: https://github.com/AIDotNet/NuGet.Next/releases
+[github-releasedate-shield]: https://img.shields.io/github/release-date/AIDotNet/NuGet.Next?color=black&labelColor=black&style=flat
+[github-releasedate-link]: https://github.com/AIDotNet/NuGet.Next/releases
+[github-contributors-shield]: https://img.shields.io/github/contributors/AIDotNet/NuGet.Next?color=c4f042&labelColor=black&style=flat
+[github-contributors-link]: https://github.com/AIDotNet/NuGet.Next/graphs/contributors
+[github-forks-shield]: https://img.shields.io/github/forks/AIDotNet/NuGet.Next?color=8ae8ff&labelColor=black&style=flat
+[github-forks-link]: https://github.com/AIDotNet/NuGet.Next/network/members
+[github-stars-shield]: https://img.shields.io/github/stars/AIDotNet/NuGet.Next?color=ffcb47&labelColor=black&style=flat
+[github-stars-link]: https://github.com/AIDotNet/NuGet.Next/network/stargazers
+[github-issues-shield]: https://img.shields.io/github/issues/AIDotNet/NuGet.Next?color=ff80eb&labelColor=black&style=flat
+[github-issues-link]: https://github.com/AIDotNet/NuGet.Next/issues
+[github-license-shield]: https://img.shields.io/github/license/AIDotNet/NuGet.Next?color=white&labelColor=black&style=flat
+[github-license-link]: https://github.com/AIDotNet/NuGet.Next/blob/main/LICENSE
+
 
 NuGet 最新版开源私有化包管理，我们基于BaGet的基础之上增加了更多的功能，并且对中国市场做更多兼容，比如国产化支持。
 
