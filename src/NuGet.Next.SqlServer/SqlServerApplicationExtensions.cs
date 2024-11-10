@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Next.Core;
 using NuGet.Next.Options;
 
@@ -15,6 +16,7 @@ public static class SqlServerApplicationExtensions
             var databaseOptions = provider.GetRequiredService<NuGetNextOptions>();
 
             options.UseSqlServer(databaseOptions.Database.ConnectionString);
+            options.UseLoggerFactory((new NullLoggerFactory()));
         });
 
         return app;

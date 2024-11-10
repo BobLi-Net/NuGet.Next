@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Next.Core;
 using NuGet.Next.Options;
 
@@ -14,6 +15,8 @@ public static class DMApplicationExtensions
             var databaseOptions = provider.GetRequiredService<NuGetNextOptions>();
 
             options.UseDm(databaseOptions.Database.ConnectionString);
+            
+            options.UseLoggerFactory((new NullLoggerFactory()));
         });
 
         return app;

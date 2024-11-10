@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NuGet.Next.Core;
 using NuGet.Next.Options;
@@ -16,6 +17,8 @@ public static class MySqlApplicationExtensions
 
             options.UseMySql(databaseOptions.Database.ConnectionString,
                 ServerVersion.AutoDetect(databaseOptions.Database.ConnectionString));
+            
+            options.UseLoggerFactory((new NullLoggerFactory()));
         });
 
         return app;
