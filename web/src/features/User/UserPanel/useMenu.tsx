@@ -16,6 +16,7 @@ import { DOCUMENTS, EMAIL_SUPPORT, GITHUB_ISSUES, mailTo } from '@/const/url';
 import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
+import { useLocation } from 'react-router-dom';
 
 export const useMenu = () => {
   const router = useQueryRoute();
@@ -25,6 +26,7 @@ export const useMenu = () => {
     s.logout,
     s.user,
   ]);
+  const location = useLocation();
 
   function downloadNugetConfig() {
 
@@ -114,9 +116,17 @@ export const useMenu = () => {
       {
         icon: <Icon icon={AppWindow} />,
         key: 'admin',
-        label: '管理',
+        label: location.pathname.includes('/admin') ? '首页' : '控制面板',
         onClick: () => {
-          router.push('/admin');
+          if (!location.pathname.includes('/admin')) {
+            router.push('/admin', {
+              replace: true,
+            });
+          } else {
+            router.push('/', {
+              replace: true,
+            });
+          }
         },
       },
     ] : [

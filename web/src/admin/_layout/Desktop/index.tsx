@@ -3,11 +3,12 @@ import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, theme } from 'antd';
 import './index.css'
-import { Logo } from "@lobehub/ui";
+import { Header, Logo } from "@lobehub/ui";
 import { Package, User, Gauge, ChartCandlestick, Settings } from 'lucide-react'
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
-const { Header, Content, Footer, Sider } = Layout;
+import Avatar from "./Avatar";
+const { Content, Footer, Sider } = Layout;
 
 const DesktopLayout = memo(() => {
     const navigate = useNavigate();
@@ -33,17 +34,15 @@ const DesktopLayout = memo(() => {
                 console.log(collapsed, type);
             }}
         >
-            <div>
-                <div
-                    className="logo"
-                    style={{
-                        height: '32px',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        margin: '16px',
-                    }}
-                >
-                    <Logo size={35} extra="NuGet Next" />
-                </div>
+            <div
+                style={{
+                    height: '32px',
+                    margin: '16px',
+                    background: borderRadiusLG,
+                    
+                }}
+            >
+                <Logo size={35} extra="NuGet Next" />
             </div>
             <Menu mode="inline"
                 defaultSelectedKeys={[selectedKey]}
@@ -93,7 +92,11 @@ const DesktopLayout = memo(() => {
                 ]} />
         </Sider>
         <Layout>
-            <Header style={{ padding: 0, background: colorBgContainer }} />
+            <Header
+                actions={<>
+                    <Avatar />
+                </>}
+                style={{ padding: 0, background: colorBgContainer }} />
             <Content style={{ margin: '24px 16px 0' }}>
                 <div
                     style={{
