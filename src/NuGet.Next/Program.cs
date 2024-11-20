@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Features;
 using NuGet.Next;
 using NuGet.Next.Converters;
 using NuGet.Next.Extensions;
@@ -20,6 +21,15 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     builder.Services.AddWindowsService(options => { options.ServiceName = "NuGetNext"; });
 }
 
+var requestBodySize = builder.Configuration.GetValue("RequestSizeLimit", 100);
+builder.WebHost.ConfigureKestrel((options => { options.Limits.MaxRequestBodySize = requestBodySize * 1024 * 1024; }));
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueLengthLimit = int.MaxValue;
+    options.MultipartBodyLengthLimit = int.MaxValue; // 60000000; 
+    options.MultipartHeadersLengthLimit = int.MaxValue;
+});
 
 builder.Services.AddControllers();
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -59,7 +69,6 @@ app.UseEndpoints(endpoints =>
     var baget = new NuGetNextEndpointBuilder();
 
     baget.MapEndpoints(endpoints);
-    
 });
 
 app.MapApis();
