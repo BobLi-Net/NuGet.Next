@@ -20,6 +20,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     builder.Services.AddWindowsService(options => { options.ServiceName = "NuGetNext"; });
 }
 
+
 builder.Services.AddControllers();
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

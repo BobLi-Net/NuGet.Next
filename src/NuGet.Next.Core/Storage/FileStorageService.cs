@@ -61,21 +61,23 @@ public class FileStorageService : IStorageService
 
         try
         {
-            using (var fileStream = File.Open(path, FileMode.CreateNew))
-            {
-                await content.CopyToAsync(fileStream, DefaultCopyBufferSize, cancellationToken);
-                return StoragePutResult.Success;
-            }
+            await using var fileStream = File.Open(path, FileMode.CreateNew);
+            await content.CopyToAsync(fileStream, DefaultCopyBufferSize, cancellationToken);
+            return StoragePutResult.Success;
         }
         catch (IOException) when (File.Exists(path))
         {
-            using (var targetStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            await using var targetStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            content.Position = 0;
+            if (content.Matches(targetStream))
             {
-                content.Position = 0;
-                return content.Matches(targetStream)
-                    ? StoragePutResult.AlreadyExists
-                    : StoragePutResult.Conflict;
+                return StoragePutResult.AlreadyExists;
             }
+
+            await targetStream.DisposeAsync().ConfigureAwait(false);
+            File.Delete(path);
+                
+            return await PutAsync(path, content, contentType, cancellationToken);
         }
     }
 
