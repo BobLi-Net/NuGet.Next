@@ -1,5 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER root
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -11,14 +11,17 @@ RUN yarn
 RUN npm i
 RUN yarn run build
 
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/NuGet.Next/NuGet.Next.csproj", "src/NuGet.Next/"]
 COPY ["src/NuGet.Next.Core/NuGet.Next.Core.csproj", "src/NuGet.Next.Core/"]
 COPY ["src/NuGet.Next.Protocol/NuGet.Next.Protocol.csproj", "src/NuGet.Next.Protocol/"]
+COPY ["src/NuGet.Next.DM/NuGet.Next.DM.csproj", "src/NuGet.Next.DM/"]
+COPY ["src/NuGet.Next.MySql/NuGet.Next.MySql.csproj", "src/NuGet.Next.MySql/"]
+COPY ["src/NuGet.Next.PostgreSql/NuGet.Next.PostgreSql.csproj", "src/NuGet.Next.PostgreSql/"]
 COPY ["src/NuGet.Next.Sqlite/NuGet.Next.Sqlite.csproj", "src/NuGet.Next.Sqlite/"]
+COPY ["src/NuGet.Next.SqlServer/NuGet.Next.SqlServer.csproj", "src/NuGet.Next.SqlServer/"]
 RUN dotnet restore "src/NuGet.Next/NuGet.Next.csproj"
 COPY . .
 WORKDIR "/src/src/NuGet.Next"
