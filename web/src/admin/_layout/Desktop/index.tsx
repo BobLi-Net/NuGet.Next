@@ -15,12 +15,10 @@ const DesktopLayout = memo(() => {
     const location = useLocation();
 
     const [selectedKey, setSelectedKey] = React.useState(location.pathname);
-    console.log(selectedKey);
 
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
 
     return (<Layout className="admin-layout" style={{
         height: '100vh',
@@ -110,7 +108,7 @@ const DesktopLayout = memo(() => {
                 </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-                Ant Design ©{new Date().getFullYear()} Created by Ant UED
+               ©{new Date().getFullYear()} Created by NuGet Next Team
             </Footer>
         </Layout>
     </Layout>
