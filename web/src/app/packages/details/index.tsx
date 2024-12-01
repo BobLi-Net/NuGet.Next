@@ -296,19 +296,23 @@ const PackageDetails = () => {
                             </li>
                         )}
                         <li>
-                            <CloudDownloadOutlined /> <a onClick={() => {
-
-                                const url = detail.packageDownloadUrl ?? location.origin + '/v3/package/' +
+                            <CloudDownloadOutlined /> <a
+                                href={detail.packageDownloadUrl ?? location.origin + '/v3/package/' +
                                     detail.package.id + '/' +
                                     detail.package.normalizedVersionString + '/' +
-                                    `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`;
+                                    `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`}
+                                onClick={() => {
+                                    const url = detail.packageDownloadUrl ?? location.origin + '/v3/package/' +
+                                        detail.package.id + '/' +
+                                        detail.package.normalizedVersionString + '/' +
+                                        `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`;
 
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`;
-                                a.click();
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `${detail.package.id}.${detail.package.normalizedVersionString}.nupkg`;
+                                    a.click();
 
-                            }}>下载</a>
+                                }}>下载</a>
                         </li>
                     </ul>
                 </Card>
