@@ -194,7 +194,14 @@ public static class ApiExtensions
                 async ([FromServices] UserKeyApis apis, string id) =>
                 await apis.EnableAsync(id))
             .WithOpenApi();
+        
+        var panel = group.MapGroup("api/v3/panel");
 
+        panel.MapGet(string.Empty,
+                async ([FromServices] PanelApi apis) =>
+                await apis.GetAsync())
+            .WithOpenApi();
+        
         return app;
     }
 }

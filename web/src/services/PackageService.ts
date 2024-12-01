@@ -18,7 +18,6 @@ export const PackageInfo = (id: string, version?: string | null) => {
 }
 
 export const PutPackage = (data: FormData) => {
-
     // 使用表单提交文件
     return fetch(`/api/v2/package`, {
         method: 'PUT',

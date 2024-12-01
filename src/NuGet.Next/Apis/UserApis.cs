@@ -30,7 +30,7 @@ public class UserApis(IContext context, IUserContext userContext) : IScopeDepend
         await context.Users.AddAsync(user);
 
         await context.SaveChangesAsync(new CancellationToken());
-        
+
         return OkResponse.Ok("创建成功");
     }
 
@@ -72,7 +72,7 @@ public class UserApis(IContext context, IUserContext userContext) : IScopeDepend
         {
             return new OkResponse(false, "删除失败");
         }
-        
+
         return OkResponse.Ok("删除成功");
     }
 
@@ -100,7 +100,7 @@ public class UserApis(IContext context, IUserContext userContext) : IScopeDepend
     /// <summary>
     /// 更新密码
     /// </summary>
-    public async Task UpdatePasswordAsync(UpdatePasswordInput input)
+    public async Task<OkResponse> UpdatePasswordAsync(UpdatePasswordInput input)
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.Id == userContext.UserId);
 
@@ -109,13 +109,17 @@ public class UserApis(IContext context, IUserContext userContext) : IScopeDepend
             throw new NotFoundException("用户不存在");
         }
 
-        if (!user.VerifyPassword(input.OldPassword))
+        if (!user.VerifyPassword(input.CurrentPassword))
         {
             throw new BadRequestException("旧密码错误");
         }
 
-        user.SetPassword(input.Password);
+        user.SetPassword(input.NewPassword);
+
+        context.Users.Update(user);
 
         await context.SaveChangesAsync(new CancellationToken());
+
+        return OkResponse.Ok("修改成功");
     }
 }

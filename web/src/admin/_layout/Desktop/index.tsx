@@ -32,16 +32,6 @@ const DesktopLayout = memo(() => {
                 console.log(collapsed, type);
             }}
         >
-            <div
-                style={{
-                    height: '32px',
-                    margin: '16px',
-                    background: borderRadiusLG,
-                    
-                }}
-            >
-                <Logo size={35} extra="NuGet Next" />
-            </div>
             <Menu mode="inline"
                 defaultSelectedKeys={[selectedKey]}
                 selectedKeys={[selectedKey]}

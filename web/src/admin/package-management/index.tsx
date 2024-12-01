@@ -3,7 +3,7 @@ import { Flexbox } from 'react-layout-kit';
 import { Button, message, Popconfirm, Table } from 'antd';
 import Divider from '@lobehub/ui/es/Form/components/FormDivider';
 import { useEffect, useState } from 'react';
-import { Tag, Tooltip } from '@lobehub/ui';
+import { Input, Tag, Tooltip } from '@lobehub/ui';
 import { DeletePackage, PackageList } from '@/services/PackageService';
 import UserSelect from '@/features/User/UserSelect';
 import { QuestionCircleOutlined } from '@ant-design/icons';
@@ -132,7 +132,7 @@ const PackageManagementPage = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [userIds, setUserIds] = useState<string[]>([]);
-    const [keyword,] = useState('');
+    const [keyword, setKeyword] = useState<string>('');
 
     async function removeUser(id: string, version: string) {
         DeletePackage(id, version)
@@ -174,6 +174,14 @@ const PackageManagementPage = () => {
                     marginLeft: 'auto',
                     marginRight: 16,
                 }}>
+                    <Input
+                        placeholder="搜索关键字"
+                        style={{
+                            width: '150px',
+                            marginRight: 16,
+                        }}
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)} />
                     <UserSelect
                         virtual={true}
                         mode="multiple"

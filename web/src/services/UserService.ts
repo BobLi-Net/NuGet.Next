@@ -1,4 +1,4 @@
-import { del, get, postJson } from "@/utils/fetch"
+import { del, get, postJson, putJson } from "@/utils/fetch"
 
 
 const prefix = '/api/v3/user'
@@ -32,5 +32,5 @@ export const deleteUser = (id: string) => {
 }
 
 export const updatePassword = (input: any) => {
-    return postJson(prefix + '/update-password', input)
+    return putJson(prefix + '/update-password', input)
 }

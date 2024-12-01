@@ -17,6 +17,7 @@ import DocsPage from "@/app/docs";
 import AboutPage from "@/app/about";
 import PrivacyPage from "@/app/privacy";
 import CurrentPackage from "@/app/current-package";
+import ChangePassword from "@/app/change-password";
 
 const routes = [
     {
@@ -65,6 +66,10 @@ const routes = [
             {
                 element: <CurrentPackage />,
                 path: "/current-package",
+            },
+            {
+                element: <ChangePassword />,
+                path: "/change-password",
             }
         ],
     },

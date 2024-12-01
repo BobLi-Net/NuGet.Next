@@ -8,7 +8,8 @@ import {
   ChartCandlestick,
   AppWindow,
   KeySquare,
-  Download
+  Download,
+  Key
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { MenuProps } from '@/components/Menu';
@@ -100,6 +101,16 @@ export const useMenu = () => {
     },
     {
       type: 'divider',
+    },
+    {
+      icon: <Icon icon={Key} />,
+      key: 'change-password',
+      label: '修改密码',
+      onClick: () => {
+        router.push('/change-password', {
+          replace: true,
+        });
+      },
     },
     {
       icon: <Icon icon={KeySquare} />,

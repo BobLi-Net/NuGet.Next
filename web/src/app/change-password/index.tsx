@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { LockOutlined } from "@ant-design/icons";
+import { updatePassword } from "@/services/UserService";
 
 const ChangePassword = memo(() => {
   const [form] = Form.useForm();
@@ -9,12 +10,14 @@ const ChangePassword = memo(() => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      // 这里添加调用API更新密码的逻辑
-      console.log("更新密码:", values);
-      message.success("密码更新成功");
-      form.resetFields();
-
+      const res = await updatePassword(values);
       
+      if(res.success){
+        message.success("密码更新成功");
+      } else {
+        message.error(res.message);
+      }
+
     } catch (error) {
       message.error("密码更新失败,请重试");
     } finally {
