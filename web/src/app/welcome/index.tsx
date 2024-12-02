@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Typography, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { Flexbox } from 'react-layout-kit';

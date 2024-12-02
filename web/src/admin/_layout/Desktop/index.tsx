@@ -3,7 +3,7 @@ import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, theme } from 'antd';
 import './index.css'
-import { Header, Logo } from "@lobehub/ui";
+import { Header } from "@lobehub/ui";
 import { Package, User, Gauge, ChartCandlestick, Settings } from 'lucide-react'
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
