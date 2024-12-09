@@ -16,7 +16,8 @@ export const createDevtools =
       }
     }
 
+    // @ts-ignore
     return optionalDevtools(showDevtools)(initializer, {
-      name: `LobeChat_${name}`,
+      name: `NuGetNext_${name}`,
     });
   };
