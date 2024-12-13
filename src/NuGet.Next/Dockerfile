@@ -6,6 +6,7 @@ EXPOSE 8081
 
 FROM node as lobe
 WORKDIR /src
+COPY  ./appsettings.Development.json ./test.json
 COPY ./web .
 RUN yarn
 RUN npm i
